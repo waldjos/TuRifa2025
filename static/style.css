@@ -1,0 +1,239 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+header {
+    background-color: #ff5733;
+    padding: 10px 0;
+    text-align: center;
+}
+
+header .logo {
+    width: 150px;
+}
+
+nav {
+    background-color: #ff5733;
+    padding: 10px 0;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+main {
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #ff5733;
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+}
+
+.animated-text {
+    font-size: 24px;
+    font-weight: bold;
+    color: #ff5733;
+    text-align: center;
+    animation: vibrate 1s infinite;
+}
+
+@keyframes vibrate {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-2px); }
+    50% { transform: translateX(2px); }
+    75% { transform: translateX(-2px); }
+    100% { transform: translateX(0); }
+}
+
+.motos-img {
+    width: 80%;
+    max-width: 600px;
+    display: block;
+    margin: 0 auto 20px;
+}
+
+form {
+    max-width: 600px;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="tel"],
+input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.checkbox-container input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+#btn-confirmar {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    background-color: #ff5733;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    margin-top: 20px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+#btn-confirmar:hover {
+    background-color: #e04e2a;
+    transform: scale(1.05);
+}
+
+#btn-confirmar:active {
+    background-color: #c7441f;
+    transform: scale(1);
+}
+
+.pago-opcion {
+    text-align: center;
+    margin-bottom: 20px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.pago-opcion:hover {
+    transform: scale(1.05);
+}
+
+.pago-opcion img {
+    width: 100px;
+    margin-bottom: 10px;
+}
+
+footer {
+    text-align: center;
+    padding: 10px 0;
+    background-color: #ff5733;
+    color: white;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+#popup {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    display: none;
+}
+
+#popup.show {
+    display: block;
+}
+
+/* Estilos mejorados para la sección de boletos disponibles */
+#boletos-form {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+#boletos-form label {
+    font-size: 18px;
+    color: #333;
+}
+
+#boletos-form input[type="number"] {
+    font-size: 16px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+#btn-azar {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #ff5733;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    margin-top: 10px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+#btn-azar:hover {
+    background-color: #e04e2a;
+    transform: scale(1.05);
+}
+
+#btn-azar:active {
+    background-color: #c7441f;
+    transform: scale(1);
+}
+
+#boletos-form p {
+    font-size: 16px;
+    color: #333;
+    margin-top: 10px;
+}
