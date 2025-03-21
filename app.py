@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, flash, jsonify, send_from_dir
 from flask_mail import Mail, Message
 from dotenv import load_dotenv
 import os
-import json
 
 load_dotenv()
 
@@ -34,13 +33,15 @@ def send_email():
         telefono = request.form['telefono']
         email = request.form['email']
         boletos = request.form['boletos']
-        comprobante = request.files['comprobante']
+        referencia = request.form['referencia']
+        monto = request.form['monto']
+        comprobante = request.files.get('comprobante')
 
         # Crear el mensaje de correo
         msg = Message('Nuevo mensaje de contacto',
                       sender=app.config['MAIL_USERNAME'],
                       recipients=[app.config['MAIL_USERNAME']])
-        msg.body = f"Nombre: {nombre}\nIdentificación: {identificacion}\nTeléfono: {telefono}\nEmail: {email}\nBoletos: {boletos}".encode('utf-8')
+        msg.body = f"Nombre: {nombre}\nIdentificación: {identificacion}\nTeléfono: {telefono}\nEmail: {email}\nBoletos: {boletos}\nReferencia: {referencia}\nMonto: {monto}".encode('utf-8')
 
         # Adjuntar el comprobante de pago
         if comprobante:
