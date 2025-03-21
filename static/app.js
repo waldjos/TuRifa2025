@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Botón "Contacto" - Redirige a WhatsApp
     document.getElementById("btn-contacto").addEventListener("click", () => {
-        popup.innerHTML = `<a href="https://wa.me/584142726023" class="btn-whatsapp">📲 Contactar por WhatsApp</a>`;
+        popup.innerHTML = `<a href="https://wa.me/message/EWWI4M7TAO24N1" class="btn-whatsapp">📲 Contactar por WhatsApp</a>`;
         popup.classList.add("show");
         setTimeout(() => popup.classList.remove("show"), 6000);
     });

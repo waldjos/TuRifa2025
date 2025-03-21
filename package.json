@@ -1,5 +1,12 @@
 {
+  "name": "tu-rifa2025",
+  "version": "1.0.0",
+  "description": "Proyecto de rifa",
+  "main": "app.py",
   "dependencies": {
     "@vercel/analytics": "^1.5.0"
+  },
+  "scripts": {
+    "start": "python app.py"
   }
 }
