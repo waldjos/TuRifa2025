@@ -3,9 +3,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const popup = document.getElementById("popup");
 
-    const tasaDolar = 79; // Tasa de cambio en bolívares
+    const tasaDolar = 80; // Tasa de cambio en bolívares
+    const costoBoleto = 2; // Cambia el costo del boleto a $2
     const maxBoletos = 10000;
     const boletosSeleccionados = new Set();
+    let boletosDisponibles = [];
 
     // Función para mostrar animaciones emergentes
     function showPopup(message, duration = 3000) {
@@ -24,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
         popup.innerHTML = `
             <p><strong>📅 ¿Cuándo será la fecha del sorteo?</strong><br>Cuando se haya vendido la mitad de los boletos, anunciaremos la fecha.</p>
             <p><strong>📩 ¿Cómo sé si estoy participando?</strong><br>Recibirás un correo de confirmación después de tu pago.</p>
-            <p><strong>🏆 ¿Cómo se elegirá el número ganador?</strong><br>El sorteo se hará con la plataforma de Kino Táchira.</p>
+            <p><strong>🏆 ¿Cómo se elegirá el número ganador?</strong><br>El sorteo se hará con la plataforma de La Loteria de Medellin.</p>
         `;
         popup.classList.add("show");
         setTimeout(() => popup.classList.remove("show"), 6000);
@@ -32,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Botón "Contacto" - Redirige a WhatsApp
     document.getElementById("btn-contacto").addEventListener("click", () => {
-        popup.innerHTML = `<a href="https://wa.me/584242735792" class="btn-whatsapp">📲 Contactar por WhatsApp</a>`;
+        popup.innerHTML = `<a href="https://wa.me/584142726023" class="btn-whatsapp">📲 Contactar por WhatsApp</a>`;
         popup.classList.add("show");
         setTimeout(() => popup.classList.remove("show"), 6000);
     });
@@ -46,6 +48,16 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
+    // Obtener la lista de boletos disponibles desde el servidor
+    function obtenerBoletosDisponibles() {
+        fetch('/boletos_disponibles')
+            .then(response => response.json())
+            .then(data => {
+                boletosDisponibles = data;
+            })
+            .catch(error => console.error('Error al obtener los boletos disponibles:', error));
+    }
+
     // Actualizar total en bolívares en tiempo real
     function actualizarTotal() {
         let cantidad = parseInt(document.getElementById("numero-boletos").value);
@@ -53,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("numero-boletos").value = 2; // Evita que seleccionen menos de 2 boletos
             cantidad = 2;
         }
-        let totalBs = cantidad * tasaDolar;
+        let totalBs = cantidad * costoBoleto * tasaDolar;
         document.getElementById("total-bolivares").innerText = totalBs.toLocaleString();
     }
 
@@ -64,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("lista-numeros").innerHTML = "";
 
         while (boletosSeleccionados.size < cantidad) {
-            let numRifa = Math.floor(Math.random() * maxBoletos) + 1;
+            let numRifa = boletosDisponibles[Math.floor(Math.random() * boletosDisponibles.length)];
             if (!boletosSeleccionados.has(numRifa)) {
                 boletosSeleccionados.add(numRifa);
                 let listItem = document.createElement("li");
@@ -111,4 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Enviar el formulario manualmente
         event.target.submit();
     });
+
+    // Obtener la lista de boletos disponibles al cargar la página
+    obtenerBoletosDisponibles();
 });

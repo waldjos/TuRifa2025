@@ -12,7 +12,8 @@ header {
 }
 
 header .logo {
-    width: 150px;
+    width: 110px; /* Ajusta el tamaño del logo */
+    height: auto;
 }
 
 nav {
@@ -69,8 +70,8 @@ h2 {
 }
 
 .motos-img {
-    width: 80%;
-    max-width: 600px;
+    width: 60%; /* Ajusta el tamaño de la imagen de las motos */
+    height: auto;
     display: block;
     margin: 0 auto 20px;
 }

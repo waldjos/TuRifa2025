@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/style.css">
-    <script src="../static/app.js" defer></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='app.js') }}" defer></script>
     <title>TuRifa2025</title>
 </head>
 <body>
 
     <!-- Logo en la esquina -->
     <header>
-        <img src="../static/logo.png" alt="TuRifa2025 Logo" class="logo">
+        <img src="{{ url_for('static', filename='Logo.png') }}" alt="Logo TuRifa2025" class="logo">
     </header>
 
     <!-- Menú de navegación -->
@@ -28,8 +28,8 @@
         <!-- Información del evento -->
         <section id="premios">
             <h1>COMBO SEMANA SANTA</h1>
-            <p class="animated-text"> <strong>Yamaha DT175 y Empire RK200</strong></p>
-            <img src="../static/motos.png" alt="Motos Premio" class="motos-img">
+            <p class="animated-text"><strong>Un Yamaha DT175 y una Empire RK200</strong></p>
+            <img src="{{ url_for('static', filename='Motos.png') }}" alt="Motos Premio" class="motos-img">
         </section>
 
         <!-- Lista de boletos -->
@@ -48,7 +48,7 @@
         <!-- Datos personales -->
         <section>
             <h2>Datos Personales</h2>
-            <form action="https://formsubmit.co/turifa2025@gmail.com" method="POST" />
+            <form id="datos-form" action="https://formsubmit.co/turifa2025@gmail.com" method="POST">
                 <label for="nombre">Nombres y Apellidos</label>
                 <input type="text" id="nombre" name="nombre" required>
 
@@ -82,15 +82,15 @@
         <section id="metodos-pago">
             <h2>Métodos de Pago</h2>
             <div class="pago-opcion">
-                <img src="../static/zelle.png" alt="Zelle">
+                <img src="{{ url_for('static', filename='zelle.png') }}" alt="Zelle" class="pago-opcion">
                 <p>Zelle: (406) 579 7012<br>Nombre: Daniel Piñero</p>
             </div>
             <div class="pago-opcion">
-                <img src="../static/pagomovil.png" alt="PagoMóvil">
+                <img src="{{ url_for('static', filename='pagomovil.png') }}" alt="PagoMóvil" class="pago-opcion">
                 <p>Banesco<br>Cédula: 28461204<br>Teléfono: 04242735792</p>
             </div>
             <div class="pago-opcion">
-                <img src="../static/paypal.png" alt="PayPal">
+                <img src="{{ url_for('static', filename='Paypal.png') }}" alt="PayPal" class="pago-opcion">
                 <p>PayPal: deniseerivas7480@gmail.com</p>
             </div>
         </section>
