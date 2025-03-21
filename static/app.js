@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Botón "Contacto" - Redirige a WhatsApp
     document.getElementById("btn-contacto").addEventListener("click", () => {
-        popup.innerHTML = `<a href="https://wa.me/message/EWWI4M7TAO24N1" class="btn-whatsapp">📲 Contactar por WhatsApp</a>`;
+        popup.innerHTML = `<a href="https://wa.me/584142726023" class="btn-whatsapp">📲 Contactar por WhatsApp</a>`;
         popup.classList.add("show");
         setTimeout(() => popup.classList.remove("show"), 6000);
     });
@@ -104,10 +104,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Animación al confirmar pago
     document.getElementById("datos-form").addEventListener("submit", (event) => {
-        event.preventDefault(); // Evita que el formulario se envíe automáticamente
-
         const termsChecked = document.getElementById("acepto-terminos").checked;
         if (!termsChecked) {
+            event.preventDefault(); // Evita que el formulario se envíe automáticamente
             showPopup("⚠️ Debes aceptar los términos y condiciones.", 4000);
             return;
         }
@@ -119,9 +118,6 @@ document.addEventListener("DOMContentLoaded", () => {
         popup.innerHTML = `<p>🕒 Su transacción está siendo verificada. En breve le enviaremos un correo.</p>`;
         popup.classList.add("show");
         setTimeout(() => popup.classList.remove("show"), 5000);
-
-        // Enviar el formulario manualmente
-        event.target.submit();
     });
 
     // Obtener la lista de boletos disponibles al cargar la página
