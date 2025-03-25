@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         document.getElementById("boletos").value = Array.from(boletosSeleccionados).join(", ");
 
-        emailjs.sendForm("service_yq2pt2d", "template_zm3k4bo", this)
+        emailjs.sendForm("service_yq2pt2d", "template_vwsrjs3", this)
             .then(function () {
                 showPopup("✅ ¡Formulario enviado con éxito! Revisa tu correo.", 4000);
                 document.getElementById("datos-form").reset();
