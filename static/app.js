@@ -106,16 +106,34 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Validación y envío del formulario
+    // Validación y envío del formulario con EmailJS
     document.getElementById("datos-form").addEventListener("submit", (event) => {
+        event.preventDefault();
+
         const termsChecked = document.getElementById("acepto-terminos").checked;
         if (!termsChecked) {
-            event.preventDefault();
             showPopup("⚠️ Debes aceptar los términos y condiciones.", 4000);
             return;
         }
 
-        // Asegura que los boletos se actualicen justo antes del envío
+        // Actualizar campo boletos antes de enviar
         document.getElementById("boletos").value = Array.from(boletosSeleccionados).join(", ");
+
+        // Enviar el formulario con EmailJS
+        emailjs.sendForm("service_yq2pt2d", "template_zm3k4bo", this)
+            .then(function () {
+                showPopup("✅ ¡Formulario enviado con éxito! Revisa tu correo.", 4000);
+                document.getElementById("datos-form").reset();
+                document.getElementById("lista-numeros").innerHTML = "";
+                document.getElementById("boletos-seleccionados").innerText = "0";
+                document.getElementById("total-bolivares").innerText = "0";
+                boletosSeleccionados.clear();
+            }, function (error) {
+                console.error("Error:", error);
+                showPopup("❌ Ocurrió un error al enviar. Intenta más tarde.", 4000);
+            });
     });
+
+    // Cargar boletos al iniciar
+    obtenerBoletosDisponibles();
 });

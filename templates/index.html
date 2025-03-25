@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script>
+      (function(){
+        emailjs.init("p9HLWmmxXjeTlNrFL"); // Public Key
+      })();
+    </script>
     <script src="{{ url_for('static', filename='app.js') }}" defer></script>
     <title>TuRifa2025</title>
 </head>
@@ -48,7 +54,7 @@
         <!-- Datos personales -->
         <section>
             <h2>Datos Personales</h2>
-            <form id="datos-form" action="https://formsubmit.co/turifa2025@gmail.com" method="POST">
+            <form id="datos-form">
                 <label for="nombre">Nombres y Apellidos</label>
                 <input type="text" id="nombre" name="nombre" required>
             
@@ -70,7 +76,6 @@
                 <label for="monto">Monto Transferido</label>
                 <input type="number" id="monto" name="monto" required>
 
-                <!-- Línea agregada para evitar reCAPTCHA -->
                 <input type="hidden" name="_captcha" value="false">
             
                 <div class="checkbox-container">
