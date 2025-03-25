@@ -1,116 +1,121 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
-    <script>
-      (function(){
-        emailjs.init("p9HLWmmxXjeTlNrFL"); // Public Key
-      })();
-    </script>
-    <script src="{{ url_for('static', filename='app.js') }}" defer></script>
-    <title>TuRifa2025</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TuRifa2025</title>
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+
+  <!-- EmailJS (versión funcional) -->
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      emailjs.init("p9HLWmmxXjeTlNrFL"); // Tu Public Key
+    });
+  </script>
+
+  <!-- Script principal -->
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
 </head>
 <body>
+  <!-- Logo en la esquina -->
+  <header>
+    <img src="{{ url_for('static', filename='Logo.png') }}" alt="Logo TuRifa2025" class="logo" />
+  </header>
 
-    <!-- Logo en la esquina -->
-    <header>
-        <img src="{{ url_for('static', filename='Logo.png') }}" alt="Logo TuRifa2025" class="logo">
-    </header>
+  <!-- Menú de navegación -->
+  <nav>
+    <ul>
+      <li><a href="#" id="btn-premios">PREMIOS</a></li>
+      <li><a href="#" id="btn-preguntas">PREGUNTAS</a></li>
+      <li><a href="#" id="btn-contacto">CONTACTO</a></li>
+    </ul>
+  </nav>
 
-    <!-- Menú de navegación -->
-    <nav>
-        <ul>
-            <li><a href="#" id="btn-premios">PREMIOS</a></li>
-            <li><a href="#" id="btn-preguntas">PREGUNTAS</a></li>
-            <li><a href="#" id="btn-contacto">CONTACTO</a></li>
-        </ul>
-    </nav>
+  <!-- Sección principal -->
+  <main>
+    <!-- Información del evento -->
+    <section id="premios">
+      <h1>COMBO SEMANA SANTA</h1>
+      <p class="animated-text"><strong>Un Yamaha DT175 y una Empire RK200</strong></p>
+      <img src="{{ url_for('static', filename='Motos.png') }}" alt="Motos Premio" class="motos-img" />
+    </section>
 
-    <!-- Sección principal -->
-    <main>
-        <!-- Información del evento -->
-        <section id="premios">
-            <h1>COMBO SEMANA SANTA</h1>
-            <p class="animated-text"><strong>Un Yamaha DT175 y una Empire RK200</strong></p>
-            <img src="{{ url_for('static', filename='Motos.png') }}" alt="Motos Premio" class="motos-img">
-        </section>
+    <!-- Lista de boletos -->
+    <section>
+      <h2>BOLETOS DISPONIBLES</h2>
+      <form id="boletos-form">
+        <label for="numero-boletos">Número de boletos (mínimo 2):</label>
+        <input type="number" id="numero-boletos" name="numero-boletos" min="2" value="2" />
+        <button type="button" id="btn-azar">Elegir Boletos</button>
+        <p>Seleccionados: <span id="boletos-seleccionados">0</span></p>
+        <ul id="lista-numeros"></ul>
+        <p><strong>Total en Bolívares:</strong> <span id="total-bolivares">0</span> Bs</p>
+      </form>
+    </section>
 
-        <!-- Lista de boletos -->
-        <section>
-            <h2>BOLETOS DISPONIBLES</h2>
-            <form id="boletos-form">
-                <label for="numero-boletos">Número de boletos (mínimo 2):</label>
-                <input type="number" id="numero-boletos" name="numero-boletos" min="2" value="2">
-                <button type="button" id="btn-azar">Elegir Boletos</button>
-                <p>Seleccionados: <span id="boletos-seleccionados">0</span></p>
-                <ul id="lista-numeros"></ul>
-                <p><strong>Total en Bolívares:</strong> <span id="total-bolivares">0</span> Bs</p>
-            </form>
-        </section>
+    <!-- Datos personales -->
+    <section>
+      <h2>Datos Personales</h2>
+      <form id="datos-form">
+        <label for="nombre">Nombres y Apellidos</label>
+        <input type="text" id="nombre" name="nombre" required />
 
-        <!-- Datos personales -->
-        <section>
-            <h2>Datos Personales</h2>
-            <form id="datos-form">
-                <label for="nombre">Nombres y Apellidos</label>
-                <input type="text" id="nombre" name="nombre" required>
-            
-                <label for="identificacion">Identificación</label>
-                <input type="text" id="identificacion" name="identificacion">
-            
-                <label for="telefono">Teléfono</label>
-                <input type="tel" id="telefono" name="telefono" required>
-            
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email">
-            
-                <label for="boletos">Boletos Seleccionados</label>
-                <input type="text" id="boletos" name="boletos" readonly>
-            
-                <label for="referencia">Referencia de Transacción</label>
-                <input type="text" id="referencia" name="referencia" required>
-            
-                <label for="monto">Monto Transferido</label>
-                <input type="number" id="monto" name="monto" required>
+        <label for="identificacion">Identificación</label>
+        <input type="text" id="identificacion" name="identificacion" />
 
-                <input type="hidden" name="_captcha" value="false">
-            
-                <div class="checkbox-container">
-                    <input type="checkbox" id="acepto-terminos" name="acepto-terminos" required>
-                    <label for="acepto-terminos">Al confirmar autorizo el uso de mis datos personales y acepto los Términos y Condiciones</label>
-                </div>
-                <button type="submit" id="btn-confirmar">Confirmar</button>
-            </form>
-        </section>
+        <label for="telefono">Teléfono</label>
+        <input type="tel" id="telefono" name="telefono" required />
 
-        <!-- Métodos de Pago -->
-        <section id="metodos-pago">
-            <h2>Métodos de Pago</h2>
-            <div class="pago-opcion">
-                <img src="{{ url_for('static', filename='zelle.png') }}" alt="Zelle" class="pago-opcion">
-                <p>Zelle: (406) 579 7012<br>Nombre: Daniel Piñero</p>
-            </div>
-            <div class="pago-opcion">
-                <img src="{{ url_for('static', filename='pagomovil.png') }}" alt="PagoMóvil" class="pago-opcion">
-                <p>Banesco<br>Cédula: 28461204<br>Teléfono: 04242735792</p>
-            </div>
-            <div class="pago-opcion">
-                <img src="{{ url_for('static', filename='Paypal.png') }}" alt="PayPal" class="pago-opcion">
-                <p>PayPal: deniseerivas7480@gmail.com</p>
-            </div>
-        </section>
-    </main>
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" />
 
-    <!-- Pie de página -->
-    <footer>
-        <p>© 2025. Todos los derechos reservados.</p>
-    </footer>
+        <label for="boletos">Boletos Seleccionados</label>
+        <input type="text" id="boletos" name="boletos" readonly />
 
-    <!-- Contenedor de animaciones dinámicas -->
-    <div id="popup"></div>
+        <label for="referencia">Referencia de Transacción</label>
+        <input type="text" id="referencia" name="referencia" required />
 
+        <label for="monto">Monto Transferido</label>
+        <input type="number" id="monto" name="monto" required />
+
+        <!-- Desactiva CAPTCHA -->
+        <input type="hidden" name="_captcha" value="false" />
+
+        <div class="checkbox-container">
+          <input type="checkbox" id="acepto-terminos" name="acepto-terminos" required />
+          <label for="acepto-terminos">Al confirmar autorizo el uso de mis datos personales y acepto los Términos y Condiciones</label>
+        </div>
+        <button type="submit" id="btn-confirmar">Confirmar</button>
+      </form>
+    </section>
+
+    <!-- Métodos de Pago -->
+    <section id="metodos-pago">
+      <h2>Métodos de Pago</h2>
+      <div class="pago-opcion">
+        <img src="{{ url_for('static', filename='zelle.png') }}" alt="Zelle" class="pago-opcion" />
+        <p>Zelle: (406) 579 7012<br />Nombre: Daniel Piñero</p>
+      </div>
+      <div class="pago-opcion">
+        <img src="{{ url_for('static', filename='pagomovil.png') }}" alt="PagoMóvil" class="pago-opcion" />
+        <p>Banesco<br />Cédula: 28461204<br />Teléfono: 04242735792</p>
+      </div>
+      <div class="pago-opcion">
+        <img src="{{ url_for('static', filename='Paypal.png') }}" alt="PayPal" class="pago-opcion" />
+        <p>PayPal: deniseerivas7480@gmail.com</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Pie de página -->
+  <footer>
+    <p>© 2025. Todos los derechos reservados.</p>
+  </footer>
+
+  <!-- Contenedor de animaciones dinámicas -->
+  <div id="popup"></div>
 </body>
 </html>

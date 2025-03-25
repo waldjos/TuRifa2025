@@ -2,9 +2,8 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("Página cargada correctamente");
 
     const popup = document.getElementById("popup");
-
-    const tasaDolar = 80; // Tasa de cambio en bolívares
-    const costoBoleto = 2; // Costo del boleto en dólares
+    const tasaDolar = 80;
+    const costoBoleto = 2;
     const boletosSeleccionados = new Set();
     let boletosDisponibles = [];
 
@@ -14,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => popup.classList.remove("show"), duration);
     }
 
+    // Navegación
     document.getElementById("btn-premios").addEventListener("click", () => {
         showPopup("🎉 ¿Te quieres ganar dos motos nuevas? 🚀 Compra YA y estarás participando por un Yamaha DT175 y un Empire RK200", 4000);
     });
@@ -35,22 +35,22 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.querySelectorAll("nav ul li a").forEach(button => {
-        button.addEventListener("click", (event) => {
-            event.preventDefault();
+        button.addEventListener("click", (e) => {
+            e.preventDefault();
             button.classList.add("clicked");
             setTimeout(() => button.classList.remove("clicked"), 300);
         });
     });
 
+    // Obtener boletos disponibles desde el servidor
     function obtenerBoletosDisponibles() {
         fetch('/boletos_disponibles')
-            .then(response => response.json())
-            .then(data => {
-                boletosDisponibles = data;
-            })
-            .catch(error => console.error('Error al obtener los boletos disponibles:', error));
+            .then(res => res.json())
+            .then(data => boletosDisponibles = data)
+            .catch(err => console.error("Error al cargar boletos:", err));
     }
 
+    // Actualizar monto en bolívares
     function actualizarTotal() {
         let cantidad = parseInt(document.getElementById("numero-boletos").value);
         if (cantidad < 2) {
@@ -61,11 +61,11 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("total-bolivares").innerText = totalBs.toLocaleString();
     }
 
+    // Seleccionar boletos aleatoriamente
     document.getElementById("btn-azar").addEventListener("click", () => {
         let cantidad = parseInt(document.getElementById("numero-boletos").value);
-
         if (boletosDisponibles.length === 0) {
-            showPopup("⚠️ Aún no se han cargado los boletos disponibles. Intenta de nuevo en unos segundos.", 4000);
+            showPopup("⚠️ Aún no se han cargado los boletos disponibles.", 4000);
             return;
         }
 
@@ -73,12 +73,12 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("lista-numeros").innerHTML = "";
 
         while (boletosSeleccionados.size < cantidad) {
-            let numRifa = boletosDisponibles[Math.floor(Math.random() * boletosDisponibles.length)];
-            if (!boletosSeleccionados.has(numRifa)) {
-                boletosSeleccionados.add(numRifa);
-                let listItem = document.createElement("li");
-                listItem.innerText = `Boleto: ${numRifa}`;
-                document.getElementById("lista-numeros").appendChild(listItem);
+            const random = boletosDisponibles[Math.floor(Math.random() * boletosDisponibles.length)];
+            if (!boletosSeleccionados.has(random)) {
+                boletosSeleccionados.add(random);
+                const li = document.createElement("li");
+                li.innerText = `Boleto: ${random}`;
+                document.getElementById("lista-numeros").appendChild(li);
             }
         }
 
@@ -89,6 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("numero-boletos").addEventListener("input", actualizarTotal);
 
+    // Copiar datos al portapapeles
     document.querySelectorAll(".pago-opcion p").forEach(p => {
         p.addEventListener("click", () => {
             navigator.clipboard.writeText(p.innerText);
@@ -96,31 +97,33 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // ✅ Usamos función tradicional para mantener el contexto de 'this'
+    // Enviar formulario con EmailJS
     document.getElementById("datos-form").addEventListener("submit", function (event) {
         event.preventDefault();
 
-        const termsChecked = document.getElementById("acepto-terminos").checked;
-        if (!termsChecked) {
+        if (!document.getElementById("acepto-terminos").checked) {
             showPopup("⚠️ Debes aceptar los términos y condiciones.", 4000);
             return;
         }
 
+        // Asegura que los boletos seleccionados se carguen en el input
         document.getElementById("boletos").value = Array.from(boletosSeleccionados).join(", ");
 
         emailjs.sendForm("service_yq2pt2d", "template_vwsrjs3", this)
-            .then(function () {
+            .then(() => {
                 showPopup("✅ ¡Formulario enviado con éxito! Revisa tu correo.", 4000);
-                document.getElementById("datos-form").reset();
+                this.reset();
                 document.getElementById("lista-numeros").innerHTML = "";
                 document.getElementById("boletos-seleccionados").innerText = "0";
                 document.getElementById("total-bolivares").innerText = "0";
                 boletosSeleccionados.clear();
-            }, function (error) {
+            })
+            .catch(error => {
                 console.error("Error:", error);
                 showPopup("❌ Ocurrió un error al enviar. Intenta más tarde.", 4000);
             });
     });
 
+    // Iniciar
     obtenerBoletosDisponibles();
 });
