@@ -8,19 +8,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const boletosSeleccionados = new Set();
     let boletosDisponibles = [];
 
-    // Mostrar animaciones emergentes
     function showPopup(message, duration = 3000) {
         popup.innerHTML = `<p>${message}</p>`;
         popup.classList.add("show");
         setTimeout(() => popup.classList.remove("show"), duration);
     }
 
-    // Botón "Premios"
     document.getElementById("btn-premios").addEventListener("click", () => {
         showPopup("🎉 ¿Te quieres ganar dos motos nuevas? 🚀 Compra YA y estarás participando por un Yamaha DT175 y un Empire RK200", 4000);
     });
 
-    // Botón "Preguntas"
     document.getElementById("btn-preguntas").addEventListener("click", () => {
         popup.innerHTML = `
             <p><strong>📅 ¿Cuándo será la fecha del sorteo?</strong><br>Cuando se haya vendido la mitad de los boletos, anunciaremos la fecha.</p>
@@ -31,14 +28,12 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => popup.classList.remove("show"), 6000);
     });
 
-    // Botón "Contacto"
     document.getElementById("btn-contacto").addEventListener("click", () => {
         popup.innerHTML = `<a href="https://wa.me/584142726023" class="btn-whatsapp">📲 Contactar por WhatsApp</a>`;
         popup.classList.add("show");
         setTimeout(() => popup.classList.remove("show"), 6000);
     });
 
-    // Efecto de clic en el menú
     document.querySelectorAll("nav ul li a").forEach(button => {
         button.addEventListener("click", (event) => {
             event.preventDefault();
@@ -47,7 +42,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Obtener lista de boletos disponibles desde el servidor
     function obtenerBoletosDisponibles() {
         fetch('/boletos_disponibles')
             .then(response => response.json())
@@ -57,7 +51,6 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch(error => console.error('Error al obtener los boletos disponibles:', error));
     }
 
-    // Actualizar total en bolívares
     function actualizarTotal() {
         let cantidad = parseInt(document.getElementById("numero-boletos").value);
         if (cantidad < 2) {
@@ -68,7 +61,6 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("total-bolivares").innerText = totalBs.toLocaleString();
     }
 
-    // Selección aleatoria de boletos
     document.getElementById("btn-azar").addEventListener("click", () => {
         let cantidad = parseInt(document.getElementById("numero-boletos").value);
 
@@ -95,10 +87,8 @@ document.addEventListener("DOMContentLoaded", () => {
         actualizarTotal();
     });
 
-    // Cambios en el número de boletos
     document.getElementById("numero-boletos").addEventListener("input", actualizarTotal);
 
-    // Copiado automático en métodos de pago
     document.querySelectorAll(".pago-opcion p").forEach(p => {
         p.addEventListener("click", () => {
             navigator.clipboard.writeText(p.innerText);
@@ -106,8 +96,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Validación y envío del formulario con EmailJS
-    document.getElementById("datos-form").addEventListener("submit", (event) => {
+    // ✅ Usamos función tradicional para mantener el contexto de 'this'
+    document.getElementById("datos-form").addEventListener("submit", function (event) {
         event.preventDefault();
 
         const termsChecked = document.getElementById("acepto-terminos").checked;
@@ -116,10 +106,8 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Actualizar campo boletos antes de enviar
         document.getElementById("boletos").value = Array.from(boletosSeleccionados).join(", ");
 
-        // Enviar el formulario con EmailJS
         emailjs.sendForm("service_yq2pt2d", "template_zm3k4bo", this)
             .then(function () {
                 showPopup("✅ ¡Formulario enviado con éxito! Revisa tu correo.", 4000);
@@ -134,6 +122,5 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     });
 
-    // Cargar boletos al iniciar
     obtenerBoletosDisponibles();
 });
