@@ -5,30 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TuRifa2025</title>
 
-  <!-- Firebase SDKs -->
-  <script type="module">
-    // Importar Firebase (modular SDK)
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-    import { getDatabase, ref, get, push, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyDKq8tELtNRPP4MoSSyG3sn_18z7WdhzQ",
-      authDomain: "turifa2025-7f3f1.firebaseapp.com",
-      projectId: "turifa2025-7f3f1",
-      storageBucket: "turifa2025-7f3f1.appspot.com",
-      messagingSenderId: "788208791145",
-      appId: "1:788208791145:web:8611671eb1b8196c4a5a78",
-      databaseURL: "https://turifa2025-7f3f1-default-rtdb.firebaseio.com"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    window.firebaseDB = getDatabase(app);
-    window.firebaseRef = ref;
-    window.firebasePush = push;
-    window.firebaseSet = set;
-    window.firebaseGet = get;
-    window.firebaseOnValue = onValue;
-  </script>
+  <!-- Estilos -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" />
 
   <!-- EmailJS -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
@@ -36,14 +15,35 @@
     emailjs.init('p9hLWmmvXjeTINrFL');
   </script>
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-  <!-- App principal -->
+    const firebaseConfig = {
+      apiKey: "AIzaSyDxK8dLEtNRPP4MoSSyG3Sn_18z7WdhzQ",
+      authDomain: "turifa2025-7f3f1.firebaseapp.com",
+      databaseURL: "https://turifa2025-7f3f1-default-rtdb.firebaseio.com",
+      projectId: "turifa2025-7f3f1",
+      storageBucket: "turifa2025-7f3f1.appspot.com",
+      messagingSenderId: "788208791145",
+      appId: "1:788208791145:web:8611671e1b1b196c4a5a78",
+      measurementId: "G-F1YWCWMJXP"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    window.db = getDatabase(app);
+    window.firebaseRef = ref;
+    window.firebaseSet = set;
+    window.firebaseGet = get;
+    window.firebaseChild = child;
+  </script>
+
+  <!-- Script principal -->
   <script src="{{ url_for('static', filename='app.js') }}" defer></script>
 </head>
-
 <body>
+
   <!-- Logo -->
   <header>
     <img src="{{ url_for('static', filename='Logo.png') }}" alt="Logo TuRifa2025" class="logo" />
@@ -84,14 +84,41 @@
     <section>
       <h2>Datos Personales</h2>
       <form id="form">
-        <div class="field"><label for="nombre">Nombre</label><input type="text" name="nombre" id="nombre" /></div>
-        <div class="field"><label for="identificacion">Identificación</label><input type="text" name="identificacion" id="identificacion" /></div>
-        <div class="field"><label for="telefono">Teléfono</label><input type="text" name="telefono" id="telefono" /></div>
-        <div class="field"><label for="email">Email</label><input type="text" name="email" id="email" /></div>
-        <div class="field"><label for="boletos">Boletos</label><input type="text" name="boletos" id="boletos" readonly /></div>
-        <div class="field"><label for="referencia">Referencia</label><input type="text" name="referencia" id="referencia" /></div>
-        <div class="field"><label for="monto">Monto</label><input type="text" name="monto" id="monto" /></div>
-        <input type="submit" id="button" value="Confirmar Compra" />
+        <div class="field">
+          <label for="nombre">Nombre</label>
+          <input type="text" name="nombre" id="nombre" required>
+        </div>
+        <div class="field">
+          <label for="identificacion">Identificación</label>
+          <input type="text" name="identificacion" id="identificacion">
+        </div>
+        <div class="field">
+          <label for="telefono">Teléfono</label>
+          <input type="tel" name="telefono" id="telefono" required>
+        </div>
+        <div class="field">
+          <label for="email">Correo Electrónico</label>
+          <input type="email" name="email" id="email" required>
+        </div>
+        <div class="field">
+          <label for="boletos">Boletos Seleccionados</label>
+          <input type="text" name="boletos" id="boletos" readonly>
+        </div>
+        <div class="field">
+          <label for="referencia">Referencia de Transacción</label>
+          <input type="text" name="referencia" id="referencia" required>
+        </div>
+        <div class="field">
+          <label for="monto">Monto Transferido</label>
+          <input type="number" name="monto" id="monto" required>
+        </div>
+
+        <div class="checkbox-container">
+          <input type="checkbox" id="acepto-terminos" name="acepto-terminos" required />
+          <label for="acepto-terminos">Al confirmar autorizo el uso de mis datos personales y acepto los Términos y Condiciones</label>
+        </div>
+
+        <input type="submit" id="button" value="Confirmar Compra">
       </form>
     </section>
 
@@ -108,7 +135,7 @@
       </div>
       <div class="pago-opcion">
         <img src="{{ url_for('static', filename='Paypal.png') }}" alt="PayPal" class="pago-opcion" />
-        <p>PayPal: denisserivas7480@gmail.com</p>
+        <p>PayPal: deniseerivas7480@gmail.com</p>
       </div>
     </section>
   </main>
@@ -118,7 +145,8 @@
     <p>© 2025. Todos los derechos reservados.</p>
   </footer>
 
-  <!-- Popup -->
+  <!-- Contenedor de mensajes -->
   <div id="popup"></div>
+
 </body>
 </html>
