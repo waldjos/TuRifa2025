@@ -7,14 +7,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const boletosSeleccionados = new Set();
     let boletosDisponibles = [];
 
-    // Mostrar mensajes emergentes
     function showPopup(message, duration = 3000) {
         popup.innerHTML = `<p>${message}</p>`;
         popup.classList.add("show");
         setTimeout(() => popup.classList.remove("show"), duration);
     }
 
-    // Navegación superior
+    // Navegación
     document.getElementById("btn-premios").addEventListener("click", () => {
         showPopup("🎉 ¿Te quieres ganar dos motos nuevas? 🚀 Compra YA y estarás participando por un Yamaha DT175 y un Empire RK200", 4000);
     });
@@ -35,15 +34,15 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => popup.classList.remove("show"), 6000);
     });
 
-    // Efecto de clic en navegación
     document.querySelectorAll("nav ul li a").forEach(button => {
         button.addEventListener("click", (e) => {
             e.preventDefault();
             button.classList.add("clicked");
             setTimeout(() => button.classList.remove("clicked"), 300);
+        });
     });
 
-    // Cargar boletos desde el backend
+    // Obtener boletos disponibles desde backend
     function obtenerBoletosDisponibles() {
         fetch('/boletos_disponibles')
             .then(res => res.json())
@@ -51,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch(err => console.error("Error al cargar boletos:", err));
     }
 
-    // Calcular total en bolívares
+    // Calcular total en Bs
     function actualizarTotal() {
         let cantidad = parseInt(document.getElementById("numero-boletos").value);
         if (cantidad < 2) {
@@ -62,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("total-bolivares").innerText = totalBs.toLocaleString("es-VE");
     }
 
-    // Selección aleatoria de boletos
+    // Seleccionar boletos
     document.getElementById("btn-azar").addEventListener("click", () => {
         let cantidad = parseInt(document.getElementById("numero-boletos").value);
         if (boletosDisponibles.length === 0) {
@@ -90,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("numero-boletos").addEventListener("input", actualizarTotal);
 
-    // Copiar datos al portapapeles (métodos de pago)
+    // Copiar métodos de pago
     document.querySelectorAll(".pago-opcion p").forEach(p => {
         p.addEventListener("click", () => {
             navigator.clipboard.writeText(p.innerText);
@@ -98,46 +97,33 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Envío del formulario
+    // Enviar formulario con EmailJS
+    const btn = document.getElementById("button");
+    const form = document.getElementById("form");
 
-    const btn = document.getElementById('button');
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();
 
-document.getElementById('form')
- .addEventListener('submit', function(event) {
-   event.preventDefault();
+        btn.value = "Enviando...";
 
-   btn.value = 'Sending...';
-
-   const serviceID = 'default_service';
-   const templateID = 'template_vwsrjs3';
-
-   emailjs.sendForm(serviceID, templateID, this)
-    .then(() => {
-      btn.value = 'Confirmar Compra';
-      alert('Sent!');
-    }, (err) => {
-      btn.value = 'Confirmar Compra';
-      alert(JSON.stringify(err));
-    });
-});
-        // Agregar boletos al input antes de enviar
         document.getElementById("boletos").value = Array.from(boletosSeleccionados).join(", ");
 
-        emailjs.sendForm("service_yq2pt2d", "template_vwsrjs3", this)
+        emailjs.sendForm("default_service", "template_vwsrjs3", form)
             .then(() => {
+                btn.value = "Confirmar Compra";
                 showPopup("✅ ¡Formulario enviado con éxito! Revisa tu correo.", 4000);
-                this.reset();
+                form.reset();
                 document.getElementById("lista-numeros").innerHTML = "";
                 document.getElementById("boletos-seleccionados").innerText = "0";
                 document.getElementById("total-bolivares").innerText = "0";
                 boletosSeleccionados.clear();
-            })
-            .catch(error => {
-                console.error("❌ Error al enviar:", error);
+            }, (err) => {
+                console.error("❌ Error al enviar:", err);
+                btn.value = "Confirmar Compra";
                 showPopup("❌ Ocurrió un error al enviar. Intenta más tarde.", 4000);
             });
     });
 
-    // Iniciar
+    // Inicializar boletos disponibles
     obtenerBoletosDisponibles();
 });
