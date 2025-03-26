@@ -12,7 +12,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      emailjs.init("p9HLWmmxXjeTlNrFL"); // Reemplaza con tu PUBLIC KEY si cambia
+      emailjs.init("p9hLWmmvXjeTlNrFL"); // Reemplaza con tu PUBLIC KEY si cambia
     });
   </script>
 
@@ -82,13 +82,10 @@
         <label for="monto">Monto Transferido</label>
         <input type="number" id="monto" name="monto" required />
 
-        <input type="hidden" name="_captcha" value="false" />
-
         <div class="checkbox-container">
           <input type="checkbox" id="acepto-terminos" name="acepto-terminos" required />
           <label for="acepto-terminos">Al confirmar autorizo el uso de mis datos personales y acepto los Términos y Condiciones</label>
         </div>
-
         <button type="submit" id="btn-confirmar">Confirmar</button>
       </form>
     </section>
@@ -106,18 +103,17 @@
       </div>
       <div class="pago-opcion">
         <img src="{{ url_for('static', filename='Paypal.png') }}" alt="PayPal" class="pago-opcion" />
-        <p>PayPal: denisserivas7480@gmail.com</p>
+        <p>PayPal: deniseerivas7480@gmail.com</p>
       </div>
     </section>
   </main>
 
-  <!-- Footer -->
+  <!-- Pie de página -->
   <footer>
     <p>© 2025. Todos los derechos reservados.</p>
   </footer>
 
-  <!-- Popup -->
+  <!-- Contenedor de animaciones dinámicas -->
   <div id="popup"></div>
-
 </body>
 </html>

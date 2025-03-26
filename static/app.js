@@ -2,13 +2,13 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("✅ Página cargada correctamente");
 
     const popup = document.getElementById("popup");
-    const tasaDolar = 80;
+    const tasaDolar = 100;
     const costoBoleto = 2;
     const boletosSeleccionados = new Set();
     let boletosDisponibles = [];
 
     // Inicializar EmailJS
-    emailjs.init("p9hLWmmvXjeTINrFL"); // Reemplaza "YOUR_USER_ID" con tu ID de usuario de EmailJS
+    emailjs.init("p9hLWmmvXjeTlNrFL"); // Reemplaza "YOUR_USER_ID" con tu Public Key de EmailJS
 
     // Mostrar mensajes emergentes
     function showPopup(message, duration = 3000) {
@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("numero-boletos").value = 2;
         }
         const totalBs = cantidad * costoBoleto * tasaDolar;
-        document.getElementById("total-bolivares").innerText = totalBs.toLocaleString();
+        document.getElementById("total-bolivares").innerText = totalBs.toLocaleString("es-VE");
     }
 
     // Selección aleatoria de boletos
