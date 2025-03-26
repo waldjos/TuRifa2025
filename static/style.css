@@ -70,7 +70,7 @@ h2 {
 }
 
 .motos-img {
-    width: 60%; /* Ajusta el tamaño de la imagen de las motos */
+    width: 60%;
     height: auto;
     display: block;
     margin: 0 auto 20px;
@@ -113,7 +113,7 @@ input[type="email"] {
     margin-right: 10px;
 }
 
-#btn-confirmar {
+#btn-confirmar, #btn-azar {
     display: block;
     width: 100%;
     padding: 15px;
@@ -129,12 +129,12 @@ input[type="email"] {
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-#btn-confirmar:hover {
+#btn-confirmar:hover, #btn-azar:hover {
     background-color: #e04e2a;
     transform: scale(1.05);
 }
 
-#btn-confirmar:active {
+#btn-confirmar:active, #btn-azar:active {
     background-color: #c7441f;
     transform: scale(1);
 }
@@ -184,7 +184,6 @@ footer {
     display: block;
 }
 
-/* Estilos mejorados para la sección de boletos disponibles */
 #boletos-form {
     background: #fff;
     padding: 20px;
@@ -205,32 +204,6 @@ footer {
     border-radius: 5px;
     width: 100%;
     margin-bottom: 10px;
-}
-
-#btn-azar {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    background-color: #ff5733;
-    color: white;
-    border: none;
-    border-radius: 25px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    text-align: center;
-    margin-top: 10px;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-#btn-azar:hover {
-    background-color: #e04e2a;
-    transform: scale(1.05);
-}
-
-#btn-azar:active {
-    background-color: #c7441f;
-    transform: scale(1);
 }
 
 #boletos-form p {
