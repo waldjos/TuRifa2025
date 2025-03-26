@@ -7,9 +7,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const boletosSeleccionados = new Set();
     let boletosDisponibles = [];
 
-    // Inicializar EmailJS
-    emailjs.init("p9hLWmmvXjeTlNrFL"); // Reemplaza "YOUR_USER_ID" con tu Public Key de EmailJS
-
     // Mostrar mensajes emergentes
     function showPopup(message, duration = 3000) {
         popup.innerHTML = `<p>${message}</p>`;
