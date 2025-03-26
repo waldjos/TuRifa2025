@@ -5,12 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TuRifa2025</title>
 
-  <script type="text/javascript"
-  src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <!-- Estilos -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" />
 
-<script type="text/javascript">
-  emailjs.init('p9hLWmmvXjeTINrFL')
-</script>
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>
+    emailjs.init('p9hLWmmvXjeTINrFL');
+  </script>
 
   <!-- Script principal -->
   <script src="{{ url_for('static', filename='app.js') }}" defer></script>
@@ -58,35 +61,41 @@
       <h2>Datos Personales</h2>
       <form id="form">
         <div class="field">
-          <label for="nombre">nombre</label>
-          <input type="text" name="nombre" id="nombre">
+          <label for="nombre">Nombre</label>
+          <input type="text" name="nombre" id="nombre" required>
         </div>
         <div class="field">
-          <label for="identificacion">identificacion</label>
+          <label for="identificacion">Identificación</label>
           <input type="text" name="identificacion" id="identificacion">
         </div>
         <div class="field">
-          <label for="telefono">telefono</label>
-          <input type="text" name="telefono" id="telefono">
+          <label for="telefono">Teléfono</label>
+          <input type="tel" name="telefono" id="telefono" required>
         </div>
         <div class="field">
-          <label for="email">email</label>
-          <input type="text" name="email" id="email">
+          <label for="email">Correo Electrónico</label>
+          <input type="email" name="email" id="email" required>
         </div>
         <div class="field">
-          <label for="boletos">boletos</label>
-          <input type="text" name="boletos" id="boletos">
+          <label for="boletos">Boletos Seleccionados</label>
+          <input type="text" name="boletos" id="boletos" readonly>
         </div>
         <div class="field">
-          <label for="referencia">referencia</label>
-          <input type="text" name="referencia" id="referencia">
+          <label for="referencia">Referencia de Transacción</label>
+          <input type="text" name="referencia" id="referencia" required>
         </div>
         <div class="field">
-          <label for="monto">monto</label>
-          <input type="text" name="monto" id="monto">
+          <label for="monto">Monto Transferido</label>
+          <input type="number" name="monto" id="monto" required>
         </div>
-        <input type="submit" id="button" value="Confrimar Compra" >
-</form>
+
+        <div class="checkbox-container">
+          <input type="checkbox" id="acepto-terminos" name="acepto-terminos" required />
+          <label for="acepto-terminos">Al confirmar autorizo el uso de mis datos personales y acepto los Términos y Condiciones</label>
+        </div>
+
+        <input type="submit" id="button" value="Confirmar Compra">
+      </form>
     </section>
 
     <!-- Métodos de Pago -->
@@ -112,7 +121,8 @@
     <p>© 2025. Todos los derechos reservados.</p>
   </footer>
 
-  <!-- Contenedor de animaciones dinámicas -->
+  <!-- Contenedor de mensajes -->
   <div id="popup"></div>
+
 </body>
 </html>
