@@ -1,3 +1,20 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
+import { getDatabase, ref, onValue, set, get, child } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-database.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDxKd8tELNRPP4MoSSyG3sn_18z7Whd2Q",
+    authDomain: "turifa2025-7f3f1.firebaseapp.com",
+    databaseURL: "https://turifa2025-7f3f1-default-rtdb.firebaseio.com",
+    projectId: "turifa2025-7f3f1",
+    storageBucket: "turifa2025-7f3f1.appspot.com",
+    messagingSenderId: "788208791145",
+    appId: "1:788208791145:web:8611671eb1b196c4a5a78"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+
 document.addEventListener("DOMContentLoaded", () => {
     console.log("✅ Página cargada correctamente");
 
@@ -42,9 +59,19 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     function obtenerBoletosDisponibles() {
-        for (let i = 0; i < 10000; i++) {
-            boletosDisponibles.push(i.toString().padStart(4, '0'));
-        }
+        const boletosRef = ref(db, "boletosVendidos");
+        get(boletosRef).then((snapshot) => {
+            const vendidos = snapshot.exists() ? snapshot.val() : [];
+            const vendidosSet = new Set(vendidos);
+            for (let i = 0; i < 10000; i++) {
+                const num = i.toString().padStart(4, '0');
+                if (!vendidosSet.has(num)) {
+                    boletosDisponibles.push(num);
+                }
+            }
+        }).catch((error) => {
+            console.error("Error cargando boletos de Firebase:", error);
+        });
     }
 
     function actualizarTotal() {
@@ -110,7 +137,17 @@ document.addEventListener("DOMContentLoaded", () => {
                     document.getElementById("boletos-seleccionados").innerText = "0";
                     document.getElementById("total-bolivares").innerText = "0";
 
-                    // Restar boletos seleccionados de los disponibles
+                    // Guardar los boletos vendidos en Firebase
+                    const nuevosBoletos = Array.from(boletosSeleccionados);
+                    const refBoletos = ref(db, 'boletosVendidos');
+
+                    get(refBoletos).then((snapshot) => {
+                        const existentes = snapshot.exists() ? snapshot.val() : [];
+                        const actualizados = [...existentes, ...nuevosBoletos];
+                        set(refBoletos, actualizados);
+                    });
+
+                    // Eliminar de la lista local
                     boletosSeleccionados.forEach(boleto => {
                         const index = boletosDisponibles.indexOf(boleto);
                         if (index !== -1) {
@@ -119,6 +156,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     });
 
                     boletosSeleccionados.clear();
+
                 }, (err) => {
                     btn.value = 'Confirmar Compra';
                     showPopup("❌ Ocurrió un error al enviar. Intenta más tarde.", 4000);
