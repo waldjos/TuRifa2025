@@ -41,7 +41,6 @@ document.addEventListener("DOMContentLoaded", () => {
             e.preventDefault();
             button.classList.add("clicked");
             setTimeout(() => button.classList.remove("clicked"), 300);
-        });
     });
 
     // Cargar boletos desde el backend
@@ -100,14 +99,27 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Envío del formulario
-    document.getElementById("datos-form").addEventListener("submit", function (event) {
-        event.preventDefault();
 
-        if (!document.getElementById("acepto-terminos").checked) {
-            showPopup("⚠️ Debes aceptar los términos y condiciones.", 4000);
-            return;
-        }
+    const btn = document.getElementById('button');
 
+document.getElementById('form')
+ .addEventListener('submit', function(event) {
+   event.preventDefault();
+
+   btn.value = 'Sending...';
+
+   const serviceID = 'default_service';
+   const templateID = 'template_vwsrjs3';
+
+   emailjs.sendForm(serviceID, templateID, this)
+    .then(() => {
+      btn.value = 'Confirmar Compra';
+      alert('Sent!');
+    }, (err) => {
+      btn.value = 'Confirmar Compra';
+      alert(JSON.stringify(err));
+    });
+});
         // Agregar boletos al input antes de enviar
         document.getElementById("boletos").value = Array.from(boletosSeleccionados).join(", ");
 
