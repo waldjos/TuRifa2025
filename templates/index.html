@@ -8,11 +8,11 @@
   <!-- Estilos -->
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 
-  <!-- EmailJS (versión funcional) -->
-  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <!-- EmailJS (versión moderna y estable) -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      emailjs.init("p9HLWmmxXjeTlNrFL"); // Tu Public Key
+      emailjs.init("p9HLWmmxXjeTlNrFL"); // Reemplaza con tu PUBLIC KEY si cambia
     });
   </script>
 
@@ -20,12 +20,13 @@
   <script src="{{ url_for('static', filename='app.js') }}" defer></script>
 </head>
 <body>
-  <!-- Logo en la esquina -->
+
+  <!-- Logo -->
   <header>
     <img src="{{ url_for('static', filename='Logo.png') }}" alt="Logo TuRifa2025" class="logo" />
   </header>
 
-  <!-- Menú de navegación -->
+  <!-- Navegación -->
   <nav>
     <ul>
       <li><a href="#" id="btn-premios">PREMIOS</a></li>
@@ -34,16 +35,16 @@
     </ul>
   </nav>
 
-  <!-- Sección principal -->
+  <!-- Contenido principal -->
   <main>
-    <!-- Información del evento -->
+    <!-- Premios -->
     <section id="premios">
       <h1>COMBO SEMANA SANTA</h1>
       <p class="animated-text"><strong>Un Yamaha DT175 y una Empire RK200</strong></p>
       <img src="{{ url_for('static', filename='Motos.png') }}" alt="Motos Premio" class="motos-img" />
     </section>
 
-    <!-- Lista de boletos -->
+    <!-- Selección de boletos -->
     <section>
       <h2>BOLETOS DISPONIBLES</h2>
       <form id="boletos-form">
@@ -56,7 +57,7 @@
       </form>
     </section>
 
-    <!-- Datos personales -->
+    <!-- Formulario -->
     <section>
       <h2>Datos Personales</h2>
       <form id="datos-form">
@@ -81,13 +82,13 @@
         <label for="monto">Monto Transferido</label>
         <input type="number" id="monto" name="monto" required />
 
-        <!-- Desactiva CAPTCHA -->
         <input type="hidden" name="_captcha" value="false" />
 
         <div class="checkbox-container">
           <input type="checkbox" id="acepto-terminos" name="acepto-terminos" required />
           <label for="acepto-terminos">Al confirmar autorizo el uso de mis datos personales y acepto los Términos y Condiciones</label>
         </div>
+
         <button type="submit" id="btn-confirmar">Confirmar</button>
       </form>
     </section>
@@ -110,12 +111,13 @@
     </section>
   </main>
 
-  <!-- Pie de página -->
+  <!-- Footer -->
   <footer>
     <p>© 2025. Todos los derechos reservados.</p>
   </footer>
 
-  <!-- Contenedor de animaciones dinámicas -->
+  <!-- Popup -->
   <div id="popup"></div>
+
 </body>
 </html>

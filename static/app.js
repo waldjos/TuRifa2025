@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("Página cargada correctamente");
+    console.log("✅ Página cargada correctamente");
 
     const popup = document.getElementById("popup");
     const tasaDolar = 80;
@@ -7,13 +7,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const boletosSeleccionados = new Set();
     let boletosDisponibles = [];
 
+    // Inicializar EmailJS
+    emailjs.init("p9hLWmmvXjeTINrFL"); // Reemplaza "YOUR_USER_ID" con tu ID de usuario de EmailJS
+
+    // Mostrar mensajes emergentes
     function showPopup(message, duration = 3000) {
         popup.innerHTML = `<p>${message}</p>`;
         popup.classList.add("show");
         setTimeout(() => popup.classList.remove("show"), duration);
     }
 
-    // Navegación
+    // Navegación superior
     document.getElementById("btn-premios").addEventListener("click", () => {
         showPopup("🎉 ¿Te quieres ganar dos motos nuevas? 🚀 Compra YA y estarás participando por un Yamaha DT175 y un Empire RK200", 4000);
     });
@@ -34,6 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => popup.classList.remove("show"), 6000);
     });
 
+    // Efecto de clic en navegación
     document.querySelectorAll("nav ul li a").forEach(button => {
         button.addEventListener("click", (e) => {
             e.preventDefault();
@@ -42,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Obtener boletos disponibles desde el servidor
+    // Cargar boletos desde el backend
     function obtenerBoletosDisponibles() {
         fetch('/boletos_disponibles')
             .then(res => res.json())
@@ -50,18 +55,18 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch(err => console.error("Error al cargar boletos:", err));
     }
 
-    // Actualizar monto en bolívares
+    // Calcular total en bolívares
     function actualizarTotal() {
         let cantidad = parseInt(document.getElementById("numero-boletos").value);
         if (cantidad < 2) {
-            document.getElementById("numero-boletos").value = 2;
             cantidad = 2;
+            document.getElementById("numero-boletos").value = 2;
         }
         const totalBs = cantidad * costoBoleto * tasaDolar;
         document.getElementById("total-bolivares").innerText = totalBs.toLocaleString();
     }
 
-    // Seleccionar boletos aleatoriamente
+    // Selección aleatoria de boletos
     document.getElementById("btn-azar").addEventListener("click", () => {
         let cantidad = parseInt(document.getElementById("numero-boletos").value);
         if (boletosDisponibles.length === 0) {
@@ -89,7 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("numero-boletos").addEventListener("input", actualizarTotal);
 
-    // Copiar datos al portapapeles
+    // Copiar datos al portapapeles (métodos de pago)
     document.querySelectorAll(".pago-opcion p").forEach(p => {
         p.addEventListener("click", () => {
             navigator.clipboard.writeText(p.innerText);
@@ -97,7 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Enviar formulario con EmailJS
+    // Envío del formulario
     document.getElementById("datos-form").addEventListener("submit", function (event) {
         event.preventDefault();
 
@@ -106,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Asegura que los boletos seleccionados se carguen en el input
+        // Agregar boletos al input antes de enviar
         document.getElementById("boletos").value = Array.from(boletosSeleccionados).join(", ");
 
         emailjs.sendForm("service_yq2pt2d", "template_vwsrjs3", this)
@@ -119,7 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 boletosSeleccionados.clear();
             })
             .catch(error => {
-                console.error("Error:", error);
+                console.error("❌ Error al enviar:", error);
                 showPopup("❌ Ocurrió un error al enviar. Intenta más tarde.", 4000);
             });
     });
