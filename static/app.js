@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, set, push, get, child } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDxKd8tELNRPP4MoSSyG3sn_18z7Whd2Q",
@@ -13,7 +13,6 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-
 
 document.addEventListener("DOMContentLoaded", () => {
     console.log("✅ Página cargada correctamente");
@@ -38,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
         popup.innerHTML = `
             <p><strong>📅 ¿Cuándo será la fecha del sorteo?</strong><br>Cuando se haya vendido la mitad de los boletos, anunciaremos la fecha.</p>
             <p><strong>📩 ¿Cómo sé si estoy participando?</strong><br>Recibirás un correo de confirmación después de tu pago.</p>
-            <p><strong>🏆 ¿Cómo se elegirá el número ganador?</strong><br>El sorteo se hará con la plataforma de La Lotería de Medellín.</p>
+            <p><strong>🏆 ¿Cómo se elegirá el número ganador?</strong><br>El sorteo se hará con la plataforma de La Lotería del Tachira.</p>
         `;
         popup.classList.add("show");
         setTimeout(() => popup.classList.remove("show"), 6000);
@@ -70,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
         }).catch((error) => {
-            console.error("Error cargando boletos de Firebase:", error);
+            console.error("Error cargando boletos desde Firebase:", error);
         });
     }
 
@@ -120,49 +119,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const btn = document.getElementById('button');
 
-    document.getElementById('form')
-        .addEventListener('submit', function (event) {
-            event.preventDefault();
-            btn.value = 'Enviando...';
+    document.getElementById('form').addEventListener('submit', function (event) {
+        event.preventDefault();
+        btn.value = 'Enviando...';
 
-            const serviceID = 'default_service';
-            const templateID = 'template_vwsrjs3';
+        const serviceID = 'default_service';
+        const templateID = 'template_vwsrjs3';
 
-            emailjs.sendForm(serviceID, templateID, this)
-                .then(() => {
-                    btn.value = 'Confirmar Compra';
-                    showPopup("✅ ¡Formulario enviado con éxito! Revisa tu correo.", 4000);
-                    this.reset();
-                    document.getElementById("lista-numeros").innerHTML = "";
-                    document.getElementById("boletos-seleccionados").innerText = "0";
-                    document.getElementById("total-bolivares").innerText = "0";
+        emailjs.sendForm(serviceID, templateID, this)
+            .then(() => {
+                // 🔥 Después de que se envió el email
+                const nuevosBoletos = Array.from(boletosSeleccionados);
+                const refBoletos = ref(db, 'boletosVendidos');
 
-                    // Guardar los boletos vendidos en Firebase
-                    const nuevosBoletos = Array.from(boletosSeleccionados);
-                    const refBoletos = ref(db, 'boletosVendidos');
+                get(refBoletos).then((snapshot) => {
+                    const existentes = snapshot.exists() ? snapshot.val() : [];
+                    const actualizados = [...existentes, ...nuevosBoletos];
+                    set(refBoletos, actualizados).then(() => {
+                        btn.value = 'Confirmar Compra';
+                        showPopup("✅ ¡Formulario enviado y boletos registrados!", 4000);
+                        document.getElementById("form").reset();
+                        document.getElementById("lista-numeros").innerHTML = "";
+                        document.getElementById("boletos-seleccionados").innerText = "0";
+                        document.getElementById("total-bolivares").innerText = "0";
 
-                    get(refBoletos).then((snapshot) => {
-                        const existentes = snapshot.exists() ? snapshot.val() : [];
-                        const actualizados = [...existentes, ...nuevosBoletos];
-                        set(refBoletos, actualizados);
+                        // Eliminar de la lista local
+                        nuevosBoletos.forEach(boleto => {
+                            const index = boletosDisponibles.indexOf(boleto);
+                            if (index !== -1) boletosDisponibles.splice(index, 1);
+                        });
+
+                        boletosSeleccionados.clear();
                     });
-
-                    // Eliminar de la lista local
-                    boletosSeleccionados.forEach(boleto => {
-                        const index = boletosDisponibles.indexOf(boleto);
-                        if (index !== -1) {
-                            boletosDisponibles.splice(index, 1);
-                        }
-                    });
-
-                    boletosSeleccionados.clear();
-
-                }, (err) => {
-                    btn.value = 'Confirmar Compra';
-                    showPopup("❌ Ocurrió un error al enviar. Intenta más tarde.", 4000);
-                    console.error("❌ Error al enviar:", err);
                 });
-        });
+
+            }, (err) => {
+                btn.value = 'Confirmar Compra';
+                showPopup("❌ Error al enviar. Intenta de nuevo.", 4000);
+                console.error("❌ Error:", err);
+            });
+    });
 
     obtenerBoletosDisponibles();
 });
