@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const popup = document.getElementById("popup");
     const tasaDolar = 130;
-    const costoBoleto = 2;
+    const costoBoleto = 1;
     const boletosSeleccionados = new Set();
     let boletosDisponibles = [];
 
