@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let cantidad = parseInt(document.getElementById("numero-boletos").value);
         if (cantidad < 2) {
             cantidad = 2;
-            document.getElementById("numero-boletos").value = 2;
+            document.getElementById("numero-boletos").value = 1;
         }
         const totalBs = cantidad * costoBoleto * tasaDolar;
         document.getElementById("total-bolivares").innerText = totalBs.toLocaleString("es-VE");
