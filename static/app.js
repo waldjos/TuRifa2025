@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("✅ Página cargada correctamente");
 
     const popup = document.getElementById("popup");
-    const tasaDolar = 100;
+    const tasaDolar = 130;
     const costoBoleto = 2;
     const boletosSeleccionados = new Set();
     let boletosDisponibles = [];
@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     document.getElementById("btn-premios").addEventListener("click", () => {
-        showPopup("🎉 ¿Te quieres ganar dos motos nuevas? 🚀 Compra YA y estarás participando por un Yamaha DT175 y un Empire RK200", 4000);
+        showPopup("🎉 ¿Te quieres ganar dos motos nuevas? 🚀 Compra YA y estarás participando por una BERA BRF+BERA MILAN 0km", 4000);
     });
 
     document.getElementById("btn-preguntas").addEventListener("click", () => {
@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.getElementById("btn-contacto").addEventListener("click", () => {
-        popup.innerHTML = `<a href="https://wa.me/584142726023" class="btn-whatsapp">📲 Contactar por WhatsApp</a>`;
+        popup.innerHTML = `<a href="https://wa.me/584142677345" class="btn-whatsapp">📲 Contactar por WhatsApp</a>`;
         popup.classList.add("show");
         setTimeout(() => popup.classList.remove("show"), 6000);
     });
