@@ -75,8 +75,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function actualizarTotal() {
         let cantidad = parseInt(document.getElementById("numero-boletos").value);
-        if (cantidad < 2) {
-            cantidad = 2;
+        if (cantidad < 1) {
+            cantidad = 1;
             document.getElementById("numero-boletos").value = 1;
         }
         const totalBs = cantidad * costoBoleto * tasaDolar;
