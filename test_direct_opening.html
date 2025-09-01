@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Problema de CSS al abrir directamente</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .problem {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .solution {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .code {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 3px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Diagnóstico: CSS no carga al abrir index.html directamente</h1>
+    
+    <div class="problem">
+        <h2>❌ Problema identificado:</h2>
+        <p>Estás abriendo <code>templates/index.html</code> directamente en el navegador, pero este archivo contiene sintaxis de Flask/Jinja2 que no se procesa sin el servidor.</p>
+        
+        <h3>Evidencia:</h3>
+        <ul>
+            <li>En tu HTML: <code>{{ url_for('static', filename='style.css') }}</code></li>
+            <li>El navegador muestra: <code>{{ url_for('static', filename='style.css') }}</code> como texto literal</li>
+            <li>Los estilos no se aplican porque la ruta no se resuelve correctamente</li>
+        </ul>
+    </div>
+
+    <div class="solution">
+        <h2>✅ Soluciones:</h2>
+        
+        <h3>Opción 1: Ejecutar el servidor Flask (Recomendada)</h3>
+        <div class="code">
+            # Terminal 1 - Iniciar servidor
+            python app.py
+            
+            # Luego abre en tu navegador:
+            http://localhost:5000
+        </div>
+        
+        <h3>Opción 2: Usar el servidor de diagnóstico</h3>
+        <div class="code">
+            # Terminal 1 - Iniciar servidor de diagnóstico
+            python diagnostic_server.py
+            
+            # Luego abre en tu navegador:
+            http://localhost:5000/diagnostic
+        </div>
+        
+        <h3>Opción 3: Archivo HTML estático temporal</h3>
+        <p>Si necesitas ver la página sin servidor, puedo crear una versión estática:</p>
+        <button onclick="createStaticVersion()">Crear versión estática</button>
+        <div id="static-result"></div>
+    </div>
+
+    <div class="problem">
+        <h2>📋 Verificación rápida:</h2>
+        <p><strong>URL actual:</strong> <span id="current-url"></span></p>
+        <p><strong>Protocolo:</strong> <span id="protocol"></span></p>
+        <p><strong>¿Es archivo local?</strong> <span id="is-local"></span></p>
+    </div>
+
+    <script>
+        // Detectar si se está abriendo como archivo local
+        document.getElementById('current-url').textContent = window.location.href;
+        document.getElementById('protocol').textContent = window.location.protocol;
+        document.getElementById('is-local').textContent = window.location.protocol === 'file:' ? 'SÍ - Problema confirmado' : 'NO - Servidor ejecutándose';
+        
+        function createStaticVersion() {
+            const staticHTML = `
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TuRifa2025 - Versión Estática</title>
+    <link rel="stylesheet" href="static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script>
+        emailjs.init('p9hLWmmvXjeTINrFL');
+    </script>
+</head>
+<body>
+    <header>
+        <img src="static/Logo.png" alt="Logo TuRifa2025" class="logo" />
+    </header>
+    
+    <nav>
+        <ul>
+            <li><a href="#" id="btn-premios">PREMIOS</a></li>
+            <li><a href="#" id="btn-preguntas">PREGUNTAS</a></li>
+            <li><a href="#" id="btn-contacto">CONTACTO</a></li>
+        </ul>
+    </nav>
+    
+    <main>
+        <section id="premios">
+            <h1>COMBO SEMANA SANTA</h1>
+            <p class="animated-text"><strong>Un Yamaha DT175 y una Empire RK200</strong></p>
+            <img src="static/Motos.png" alt="Motos Premio" class="motos-img" />
+        </section>
+    </main>
+    
+    <footer>
+        <p>© 2025. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>`;
+            
+            const blob = new Blob([staticHTML], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            window.open(url, '_blank');
+            
+            document.getElementById('static-result').innerHTML = 
+                '<p style="color: green;">✅ Versión estática creada y abierta en nueva pestaña</p>';
+        }
+    </script>
+</body>
+</html>

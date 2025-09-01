@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Carga CSS - Diagnóstico</title>
+    <style>
+        /* Estilos de diagnóstico */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .success { color: green; font-weight: bold; }
+        .error { color: red; font-weight: bold; }
+        .warning { color: orange; font-weight: bold; }
+        .test-result {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 3px;
+        }
+        .pass { background-color: #d4edda; }
+        .fail { background-color: #f8d7da; }
+    </style>
+</head>
+<body>
+    <h1>Test de Diagnóstico - Carga de CSS</h1>
+    
+    <div class="test-section">
+        <h2>1. Verificación de Rutas</h2>
+        <div id="path-test">
+            <p><strong>Ruta actual del CSS:</strong> <span id="css-path">static/style.css</span></p>
+            <p><strong>Ruta completa esperada:</strong> <span id="full-path">/static/style.css</span></p>
+            <button onclick="testPath()">Probar Carga de CSS</button>
+            <div id="path-result"></div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Verificación de Estilos Aplicados</h2>
+        <div id="style-test">
+            <p>Este texto debería tener fondo naranja si el CSS se carga correctamente:</p>
+            <div id="test-div" style="padding: 10px; margin: 10px 0;">
+                Texto de prueba para verificar estilos
+            </div>
+            <button onclick="checkStyles()">Verificar Estilos</button>
+            <div id="style-result"></div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Consola de Errores</h2>
+        <div id="console-test">
+            <p>Abre la consola del navegador (F12) y mira la pestaña "Console" o "Consola"</p>
+            <button onclick="logErrors()">Generar Log de Errores</button>
+            <div id="console-result"></div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>4. Verificación de Red</h2>
+        <div id="network-test">
+            <p>Verifica en la pestaña "Network" o "Red" del inspector:</p>
+            <ul>
+                <li>Busca la petición a "style.css"</li>
+                <li>Verifica el status code (debe ser 200)</li>
+                <li>Verifica el tipo de contenido (debe ser text/css)</li>
+            </ul>
+            <button onclick="checkNetwork()">Verificar Petición</button>
+            <div id="network-result"></div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>5. Soluciones Comunes</h2>
+        <div id="solutions">
+            <h3>Posibles problemas y soluciones:</h3>
+            <ul>
+                <li><strong>Cache del navegador:</strong> Presiona Ctrl+F5 o Ctrl+Shift+R</li>
+                <li><strong>Ruta incorrecta:</strong> Verifica que el archivo exista en static/style.css</li>
+                <li><strong>Errores de sintaxis:</strong> Revisa el CSS con un validador</li>
+                <li><strong>Servidor no sirve archivos estáticos:</strong> Verifica la configuración del servidor</li>
+                <li><strong>AdBlocker:</strong> Desactiva temporalmente extensiones del navegador</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Funciones de test
+        function testPath() {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = '/static/style.css';
+            
+            link.onload = function() {
+                document.getElementById('path-result').innerHTML = 
+                    '<div class="test-result pass">✓ CSS cargado exitosamente</div>';
+            };
+            
+            link.onerror = function() {
+                document.getElementById('path-result').innerHTML = 
+                    '<div class="test-result fail">✗ Error al cargar CSS - Verifica la ruta</div>';
+            };
+            
+            document.head.appendChild(link);
+        }
+
+        function checkStyles() {
+            const testDiv = document.getElementById('test-div');
+            const computedStyle = window.getComputedStyle(testDiv);
+            const bgColor = computedStyle.backgroundColor;
+            
+            if (bgColor === 'rgb(255, 145, 0)' || bgColor === '#ff9100') {
+                document.getElementById('style-result').innerHTML = 
+                    '<div class="test-result pass">✓ Estilos aplicados correctamente</div>';
+            } else {
+                document.getElementById('style-result').innerHTML = 
+                    '<div class="test-result fail">✗ Estilos no aplicados - CSS no está cargando</div>';
+            }
+        }
+
+        function logErrors() {
+            console.log('=== INICIO DE DIAGNÓSTICO ===');
+            console.log('Verificando carga de CSS...');
+            
+            // Intentar cargar el CSS manualmente
+            fetch('/static/style.css')
+                .then(response => {
+                    if (response.ok) {
+                        console.log('✓ Archivo CSS encontrado');
+                        return response.text();
+                    } else {
+                        console.error('✗ Error HTTP:', response.status);
+                    }
+                })
+                .then(css => {
+                    console.log('✓ Contenido CSS:', css.substring(0, 200) + '...');
+                })
+                .catch(error => {
+                    console.error('✗ Error al cargar CSS:', error);
+                });
+                
+            document.getElementById('console-result').innerHTML = 
+                '<div class="test-result">Revisa la consola del navegador (F12) para ver los detalles</div>';
+        }
+
+        function checkNetwork() {
+            // Crear una petición manual para verificar
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', '/static/style.css', true);
+            
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    document.getElementById('network-result').innerHTML = 
+                        '<div class="test-result pass">✓ Petición exitosa - Status: 200</div>';
+                } else {
+                    document.getElementById('network-result').innerHTML = 
+                        `<div class="test-result fail">✗ Error - Status: ${xhr.status}</div>`;
+                }
+            };
+            
+            xhr.onerror = function() {
+                document.getElementById('network-result').innerHTML = 
+                    '<div class="test-result fail">✗ Error de red - Verifica la conexión</div>';
+            };
+            
+            xhr.send();
+        }
+
+        // Auto-diagnóstico al cargar
+        window.addEventListener('load', function() {
+            console.log('=== AUTO-DIAGNÓSTICO ===');
+            console.log('URL actual:', window.location.href);
+            console.log('User Agent:', navigator.userAgent);
+            
+            // Verificar si hay estilos aplicados
+            const body = document.body;
+            const computedStyle = window.getComputedStyle(body);
+            console.log('Background-color del body:', computedStyle.backgroundColor);
+        });
+    </script>
+</body>
+</html>
