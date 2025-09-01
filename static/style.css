@@ -244,3 +244,74 @@
     font-size: 13px;
   }
   .btn-admin:hover { background: rgba(255,255,255,0.02); transform: translateY(-2px); }
+
+/* Responsive adjustments for mobile devices */
+@media (max-width: 900px) {
+  header {
+    padding: 18px 12px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  header .logo {
+    max-width: 160px;
+    width: 100%;
+    margin-bottom: 6px;
+  }
+
+  header h1 { font-size: 18px; }
+
+  header .btn-primary, header .btn-admin {
+    align-self: flex-end;
+    width: auto;
+  }
+
+  nav ul { flex-wrap: wrap; gap: 12px; padding: 8px; }
+
+  main { padding: 18px 14px; }
+
+  .motos-img { max-width: 100%; }
+
+  .card-3d { width: 100%; padding: 12px; }
+
+  .animated-text { font-size: 18px; }
+
+  /* Forms and controls full width for easier tapping */
+  form { padding: 16px; }
+  .pago-opcion { padding: 12px; max-width: 100%; }
+
+  /* Ticket grid: larger touch targets and fewer columns */
+  #ticket-grid {
+    grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+    gap: 10px;
+  }
+
+  .ticket-btn {
+    padding: 12px 10px;
+    font-size: 15px;
+    border-radius: 10px;
+    min-height: 48px;
+  }
+
+  #ticket-grid-controls { flex-wrap: wrap; gap: 8px; }
+
+  /* Make primary actions clearer on mobile */
+  .btn-primary { width: 100%; text-align: center; }
+  #button { width: 100%; }
+
+  .pago-opcion img { max-width: 64px; }
+
+  /* Reduce margins for compact layout */
+  main section { margin-top: 12px; }
+}
+
+@media (max-width: 480px) {
+  /* Small phone optimizations */
+  header .logo { max-width: 140px; }
+  h1 { font-size: 20px; }
+  .animated-text { font-size: 16px; }
+  #ticket-grid { grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); }
+  .ticket-btn { padding: 14px 10px; font-size: 16px; }
+  nav ul { gap: 8px; }
+}
