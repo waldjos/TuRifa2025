@@ -5,9 +5,25 @@
   "main": "app.py",
   "dependencies": {
     "@vercel/analytics": "^1.5.0",
-    "@vercel/speed-insights": "^1.2.0"
+    "@vercel/speed-insights": "^1.2.0",
+    "node-fetch": "^2.7.0",
+    "playwright": "^1.40.0"
   },
   "scripts": {
-    "start": "python app.py"
-  }
+    "start": "python app.py",
+    "start:dev": "python -m flask run --reload",
+    "db:migrate": "echo \"Run your DB migration here (e.g. prisma migrate deploy)\"",
+    "db:seed": "echo \"Run DB seed script\"",
+    "lint": "echo \"Add linting (eslint/flake8)\"",
+    "test": "echo \"Run unit tests (jest/pytest)\"",
+    "e2e": "node tests/run-e2e.js",
+    "concurrent-test": "node tests/run-concurrent-purchase.js",
+    "typecheck": "echo \"Type checking (tsc) placeholder\""
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

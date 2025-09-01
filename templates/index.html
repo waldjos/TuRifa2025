@@ -3,11 +3,84 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TuRifa2025</title>
+  <title>TuRifa2025 — Sorteo SUPER GANA $1,000</title>
+
+  <!-- SEO / Social meta -->
+  <meta name="description" content="Participa en el sorteo SUPER GANA: premio principal $1,000 en efectivo. Compra boletos en USD o Bs, transmisión en vivo y verificación pública del resultado. Soporte: validación entre 12-24 horas." />
+  <meta name="robots" content="index, follow" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="TuRifa2025 — Sorteo SUPER GANA $1,000" />
+  <meta property="og:description" content="Participa en el sorteo SUPER GANA: premio principal $1,000 en efectivo. Compra boletos en USD o Bs, transmisión en vivo y verificación pública del resultado." />
+  <meta property="og:image" content="{{ url_for('static', filename='efectivo.png') }}" />
+  <meta property="og:site_name" content="TuRifa2025" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="TuRifa2025 — Sorteo SUPER GANA $1,000" />
+  <meta name="twitter:description" content="Participa en el sorteo SUPER GANA: premio principal $1,000 en efectivo. Compra boletos en USD o Bs, transmisión en vivo y verificación pública del resultado." />
+  <meta name="twitter:image" content="{{ url_for('static', filename='efectivo.png') }}" />
+
+  <!-- JSON-LD structured data (Organization/Event) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    "name": "Sorteo SUPER GANA",
+    "description": "Sorteo público con verificación y transmisión en vivo. Premio principal $1,000 en efectivo.",
+    "location": {
+      "@type": "VirtualLocation",
+      "url": "{{ request.url_root }}"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock"
+    }
+  }
+  </script>
 
   <!-- Estilos -->
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" />
+
+  <style>
+    /* Barra de progreso mínima y accesible */
+    #sales-progress {
+      position: relative;
+      height: 18px;
+      background: #e6e6e6;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    #sales-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg,#ff7a18,#ffb347);
+      box-shadow: 0 0 18px rgba(255,123,24,0.12);
+      transition: width 700ms ease-out;
+    }
+    #sales-progress-markers span {
+      position: absolute;
+      top: -4px;
+      height: 26px;
+      width: 1px;
+      background: rgba(255,255,255,0.35);
+    }
+    .ticket-btn {
+      background: #fff;
+      border: 1px solid #ddd;
+      padding: 6px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: monospace;
+      text-align: center;
+    }
+    .ticket-btn.selected {
+      background: linear-gradient(90deg,#ff7a18,#ffb347);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(255,123,24,0.12);
+      border-color: rgba(255,123,24,0.6);
+    }
+  </style>
 
   <!-- EmailJS -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
@@ -48,7 +121,14 @@
 
   <!-- Logo -->
   <header>
-    <img src="{{ url_for('static', filename='Logo.png') }}" alt="Logo TuRifa2025" class="logo" />
+    <img src="{{ url_for('static', filename='Logo.png') }}" alt="Logo Turifa2025" class="logo" />
+    <div style="flex:1">
+      <h1 style="font-size:20px;letter-spacing:1px;margin-bottom:4px">Turifa2025</h1>
+      <div style="font-size:12px;color:rgba(255,255,255,0.6)">Sorteo: PRÓXIMAMENTE — anunciaremos el día oficial</div>
+    </div>
+  <a class="btn-primary" href="#premios" style="white-space:nowrap">Seleccionar boletos</a>
+  <!-- Botón de admin visible públicamente (requiere login en /admin) -->
+  <a class="btn-admin" href="/admin" style="margin-left:10px; padding:8px 10px; background:transparent; border:1px solid rgba(255,255,255,0.12); color:inherit; border-radius:8px; text-decoration:none; font-size:13px;">Admin</a>
   </header>
 
   <!-- Navegación -->
@@ -63,29 +143,87 @@
   <!-- Contenido principal -->
   <main>
     <!-- Premios -->
-    <section id="premios">
-      <h1>SUPER COMBO GANA</h1>
-      <p class="animated-text"><strong>Un Bera Brf+Una Bera Milan</strong></p>
-      <img src="{{ url_for('static', filename='Motos.png') }}" alt="Motos Premio" class="motos-img" />
+    <section id="premios" style="display:flex;gap:28px;align-items:center;justify-content:space-between;">
+      <div style="flex:1">
+    <h1 style="font-size:40px;line-height:1">SUPER COMBO GANA</h1>
+  <p class="animated-text" style="font-size:20px;margin-top:6px"><strong>SUPER GANA — premio principal: $1,000</strong></p>
+  <p style="margin-top:12px;color:rgba(255,255,255,0.8)">Compra tus boletos en USD o Bs y participa en el sorteo público de <strong>SUPER GANA</strong>. Transmisión en vivo y verificación pública del seed aleatorio.</p>
+  <p style="margin-top:8px;color:rgba(255,255,255,0.7);font-size:14px">Soporte: La validación de tu participación puede tardar entre <strong>12 a 24 horas</strong>.</p>
+        <div style="margin-top:18px"><a class="btn-primary" href="#ticket-grid">Seleccionar boletos</a></div>
+      </div>
+      <div style="width:46%">
+        <div class="card-3d" style="padding:18px;border-radius:14px;">
+          <img src="{{ url_for('static', filename='efectivo.png') }}" alt="Imagen del premio: $1,000 en efectivo" class="motos-img" aria-describedby="premio-desc" />
+          <p id="premio-desc" class="sr-only">Premio principal: $1,000 USD en efectivo a entregar según las reglas del sorteo. Validación de participación: 12 a 24 horas.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Progreso de ventas -->
+    <section aria-labelledby="progreso-title" style="margin-top:18px;">
+      <h2 id="progreso-title">Progreso de Ventas</h2>
+      <div style="display:flex;gap:12px;align-items:center;justify-content:center;margin-bottom:8px;">
+        <div style="font-size:13px;color:rgba(255,255,255,0.85)">Tasa: <strong id="rate-display">--</strong></div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.6)">Última actualización: <span id="rate-updated">--</span></div>
+        <div id="rate-badge-container" style="margin-left:6px"></div>
+      </div>
+  <div id="sales-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Progreso de ventas">
+        <div id="sales-progress-fill" aria-hidden="true"></div>
+        <div id="sales-progress-markers" aria-hidden="true">
+          <span style="left:25%"></span>
+          <span style="left:50%"></span>
+          <span style="left:75%"></span>
+          <span style="left:100%"></span>
+        </div>
+      </div>
+  <p class="text-xs text-muted-foreground" style="margin-top:6px;">¡Vamos <strong id="sales-pct">0%</strong>! Vendidos <span id="vendidos-count">0</span> / <span id="total-count">10000</span></p>
     </section>
 
     <!-- Selección de boletos -->
     <section>
-      <h2>BOLETOS DISPONIBLES</h2>
-      <form id="boletos-form">
-        <label for="numero-boletos">Número de boletos (mínimo 2):</label>
-        <input type="number" id="numero-boletos" name="numero-boletos" min="1" value="1" />
-        <button type="button" id="btn-azar">Elegir Boletos</button>
-        <p>Seleccionados: <span id="boletos-seleccionados">0</span></p>
-        <ul id="lista-numeros"></ul>
-        <p><strong>Total en Bolívares:</strong> <span id="total-bolivares">0</span> Bs</p>
+      <h2 id="ticket-grid">BOLETOS DISPONIBLES</h2>
+      <form id="boletos-form" aria-labelledby="ticket-grid">
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+          <label for="numero-boletos">Número de boletos (mínimo 2):</label>
+          <input type="number" id="numero-boletos" name="numero-boletos" min="1" value="2" aria-describedby="numero-help" />
+          <div id="numero-help" class="sr-only">Selecciona mínimo 2 boletos según reglas</div>
+          <button type="button" id="btn-azar">Elegir Boletos</button>
+
+          <label for="per-page" style="margin-left:8px">Ver por página:</label>
+          <select id="per-page">
+            <option value="50">50</option>
+            <option value="100" selected>100</option>
+            <option value="200">200</option>
+          </select>
+
+          <label for="currency" style="margin-left:8px">Moneda:</label>
+          <select id="currency">
+            <option value="USD">USD</option>
+            <option value="VES">Bs</option>
+          </select>
+
+          <div aria-live="polite" style="margin-left:auto">Seleccionados: <span id="boletos-seleccionados">0</span></div>
+        </div>
+
+        <div id="ticket-grid-controls" style="margin-top:8px;display:flex;gap:8px;align-items:center;">
+          <button type="button" id="page-prev">Anterior</button>
+          <button type="button" id="page-next">Siguiente</button>
+          <div style="margin-left:8px">Página <span id="page-index">1</span></div>
+        </div>
+
+  <div id="ticket-grid" role="grid" aria-label="Cuadrícula de boletos" style="margin-top:12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:8px;">
+          <!-- botones de boletos generados por JS -->
+        </div>
+
+  <ul id="lista-numeros" aria-live="polite" style="margin-top:10px;"></ul>
+  <p><strong>Total:</strong> <span id="total-usd">0 USD</span> — <span id="total-bolivares">0</span> Bs</p>
       </form>
     </section>
 
     <!-- Formulario -->
     <section>
       <h2>Datos Personales</h2>
-      <form id="form">
+      <form id="form" novalidate>
         <div class="field">
           <label for="nombre">Nombre</label>
           <input type="text" name="nombre" id="nombre" required>
@@ -104,7 +242,7 @@
         </div>
         <div class="field">
           <label for="boletos">Boletos Seleccionados</label>
-          <input type="text" name="boletos" id="boletos" readonly>
+          <input type="text" name="boletos" id="boletos" readonly aria-live="polite">
         </div>
         <div class="field">
           <label for="referencia">Referencia de Transacción</label>
@@ -117,10 +255,10 @@
 
         <div class="checkbox-container">
           <input type="checkbox" id="acepto-terminos" name="acepto-terminos" required />
-          <label for="acepto-terminos">Al confirmar autorizo el uso de mis datos personales y acepto los Términos y Condiciones</label>
+          <label for="acepto-terminos">He leído y acepto los <a href="#">Términos y Condiciones</a> y las <a href="#">Bases del sorteo</a></label>
         </div>
 
-        <input type="submit" id="button" value="Confirmar Compra">
+        <input type="submit" id="button" class="btn-primary" value="Confirmar Compra" aria-live="polite">
       </form>
     </section>
 

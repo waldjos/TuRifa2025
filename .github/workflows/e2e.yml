@@ -1,0 +1,91 @@
+name: E2E Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+    jobs:
+      concurrent:
+        name: Concurrent purchase test
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v4
+
+          - name: Setup Python
+            uses: actions/setup-python@v4
+            with:
+              python-version: '3.11'
+
+          - name: Install Python dependencies
+            run: |
+              python -m pip install --upgrade pip
+              python -m pip install -r requirements.txt
+
+          - name: Setup Node
+            uses: actions/setup-node@v4
+            with:
+              node-version: '18'
+
+          - name: Install Node dependencies and Playwright browsers
+            run: |
+              npm ci
+              npx playwright install --with-deps
+
+          - name: Start Flask server with test endpoints enabled
+            env:
+              ALLOW_TEST_ENDPOINTS: '1'
+            run: |
+              nohup python app.py &>/dev/null &
+              sleep 3
+
+          - name: Run concurrent purchase API test
+            run: |
+              node tests/run-concurrent-purchase.js
+
+      e2e:
+        name: Full E2E suite
+        needs: concurrent
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v4
+
+          - name: Setup Python
+            uses: actions/setup-python@v4
+            with:
+              python-version: '3.11'
+
+          - name: Install Python dependencies
+            run: |
+              python -m pip install --upgrade pip
+              python -m pip install -r requirements.txt
+
+          - name: Start Flask server
+            run: |
+              nohup python app.py &>/dev/null &
+              sleep 3
+
+          - name: Setup Node
+            uses: actions/setup-node@v4
+            with:
+              node-version: '18'
+
+          - name: Install Node dependencies and Playwright browsers
+            run: |
+              npm ci
+              npx playwright install --with-deps
+
+          - name: Run E2E
+            run: |
+              npm run e2e

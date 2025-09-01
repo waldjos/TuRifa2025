@@ -89,7 +89,7 @@
         document.getElementById('is-local').textContent = window.location.protocol === 'file:' ? 'SÍ - Problema confirmado' : 'NO - Servidor ejecutándose';
         
         function createStaticVersion() {
-            const staticHTML = `
+        const staticHTML = `
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -117,9 +117,12 @@
     
     <main>
         <section id="premios">
-            <h1>COMBO SEMANA SANTA</h1>
-            <p class="animated-text"><strong>Un Yamaha DT175 y una Empire RK200</strong></p>
-            <img src="static/Motos.png" alt="Motos Premio" class="motos-img" />
+            <h1>SUPER COMBO GANA</h1>
+            <p class="animated-text"><strong>Premio principal: $1,000</strong></p>
+            <div class="card-3d" style="padding:12px;border-radius:10px;display:inline-block;">
+                <img src="static/efectivo.png" alt="Imagen del premio: $1,000 en efectivo" class="motos-img" aria-describedby="premio-desc-static" />
+                <p id="premio-desc-static" class="sr-only">Premio principal: $1,000 USD en efectivo. Validación de participación: 12 a 24 horas.</p>
+            </div>
         </section>
     </main>
     

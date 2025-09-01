@@ -5,29 +5,37 @@
     box-sizing: border-box;
   }
   
+  :root{
+    --brand: #0ea5a4; /* placeholder primary */
+    --accent: #ff7a18; /* accent */
+    --surface: #ffffff;
+    --muted: #6b7280;
+    --success: #16a34a;
+    --warning: #f59e0b;
+    --bg: #0f172a;
+    --glass: rgba(255,255,255,0.06);
+  }
+
   body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f9f9f9;
-    color: #333;
+    font-family: Inter, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(180deg, #071529 0%, #071c2a 60%);
+    color: #e6eef8;
     line-height: 1.6;
+    -webkit-font-smoothing:antialiased;
   }
   
   /* HEADER */
   header {
-    background-color: #ff9100;
-    padding: 20px 0;
-    text-align: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 32px 12px;
+    display:flex;
+    align-items:center;
+    gap:18px;
   }
-  
+
   header .logo {
-    max-width: 180px;
+    max-width: 220px;
     height: auto;
-    transition: transform 0.3s ease;
-  }
-  
-  header .logo:hover {
-    transform: scale(1.05);
+    filter: drop-shadow(0 10px 30px rgba(14,165,164,0.18));
   }
   
   /* NAV */
@@ -46,9 +54,9 @@
   
   nav ul li a {
     text-decoration: none;
-    color: #ff9100;
-    font-weight: 600;
-    transition: color 0.3s;
+    color: var(--brand);
+    font-weight: 700;
+    transition: color 0.15s ease;
   }
   
   nav ul li a:hover {
@@ -62,22 +70,25 @@
   /* MAIN */
   main {
     padding: 30px 20px;
-    max-width: 1000px;
+    max-width: 1100px;
     margin: 0 auto;
   }
   
   h1, h2 {
-    color: #ff9100;
+    color: var(--surface);
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
   }
   
   .animated-text {
     font-size: 22px;
     text-align: center;
-    animation: pulse 1.5s infinite;
-    font-weight: bold;
-    color: #444;
+    animation: pulse 2s infinite;
+    font-weight: 800;
+    color: linear-gradient(90deg,var(--brand),var(--accent));
+    background: linear-gradient(90deg, rgba(14,165,164,1), rgba(255,122,24,1));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
   
   @keyframes pulse {
@@ -86,20 +97,22 @@
   }
   
   .motos-img {
-    max-width: 60%;
+    max-width: 48%;
     margin: 20px auto;
     display: block;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 18px;
+    transform: perspective(800px) translateZ(0);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 6px 18px rgba(14,165,164,0.06);
   }
   
   /* FORM */
   form {
-    background-color: #fff;
-    padding: 25px;
-    margin-bottom: 40px;
-    border-radius: 10px;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    padding: 22px;
+    margin-bottom: 28px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.04);
+    backdrop-filter: blur(4px) saturate(120%);
   }
   
   form label {
@@ -114,17 +127,18 @@
   input[type="tel"] {
     width: 100%;
     padding: 12px;
-    margin-top: 5px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+    margin-top: 6px;
+    margin-bottom: 12px;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
     font-size: 15px;
-    transition: border-color 0.3s;
+    background: rgba(255,255,255,0.02);
+    color: var(--surface);
   }
   
   input:focus {
-    border-color: #ff9100;
-    outline: none;
+    border-color: var(--brand);
+    outline: 3px solid rgba(14,165,164,0.08);
   }
   
   .checkbox-container {
@@ -138,19 +152,21 @@
     font-size: 14px;
   }
   
-  #button, #btn-confirmar, #btn-azar {
-    background-color: #ff9100;
+  .btn-primary {
+    display:inline-block;
+    background: linear-gradient(90deg,var(--brand),var(--accent));
     color: white;
-    padding: 12px;
+    padding: 12px 18px;
     border: none;
-    border-radius: 30px;
-    width: 100%;
+    border-radius: 999px;
     font-size: 16px;
-    font-weight: bold;
+    font-weight: 700;
     cursor: pointer;
-    margin-top: 15px;
-    transition: background 0.3s, transform 0.3s;
+    transition: transform .18s ease, box-shadow .18s ease;
+    box-shadow: 0 6px 20px rgba(14,165,164,0.12);
   }
+
+  .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 14px 36px rgba(14,165,164,0.14); }
   
   #button:hover, #btn-confirmar:hover, #btn-azar:hover {
     background-color: #e36b00;
@@ -158,14 +174,14 @@
   }
   
   .pago-opcion {
-    background-color: #fff;
-    padding: 20px;
-    margin: 10px auto;
-    border-radius: 10px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    padding: 18px;
+    margin: 12px auto;
+    border-radius: 12px;
     text-align: center;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-    max-width: 500px;
-    transition: transform 0.3s;
+    box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+    max-width: 560px;
+    transition: transform 0.18s ease;
   }
   
   .pago-opcion:hover {
@@ -179,28 +195,52 @@
   
   footer {
     text-align: center;
-    background-color: #ff9100;
-    color: white;
-    padding: 10px;
+    color: rgba(255,255,255,0.7);
+    padding: 18px 8px;
     font-size: 14px;
     margin-top: 40px;
   }
   
   /* Popup */
+  /* tiny toast */
   #popup {
     position: fixed;
-    bottom: 20px;
+    bottom: 22px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: #333;
+    background: rgba(2,6,23,0.9);
     color: white;
-    padding: 12px 20px;
-    border-radius: 5px;
+    padding: 12px 18px;
+    border-radius: 10px;
     display: none;
     font-size: 14px;
-    z-index: 999;
+    z-index: 9999;
   }
-  
-  #popup.show {
-    display: block;
+
+  #popup.show { display:block; }
+
+  .ticket-btn { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace; }
+
+  /* Rate badge */
+  .rate-badge {
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    color: white;
+    display: inline-block;
   }
+  .rate-badge.ok { background: linear-gradient(90deg,#10b981,#059669); }
+  .rate-badge.warn { background: linear-gradient(90deg,#f59e0b,#d97706); }
+  .rate-badge.stale { background: linear-gradient(90deg,#ef4444,#b91c1c); }
+
+  /* Admin button (small, subtle) */
+  .btn-admin {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 8px 10px;
+    border-radius: 8px;
+    color: inherit;
+    text-decoration: none;
+    font-size: 13px;
+  }
+  .btn-admin:hover { background: rgba(255,255,255,0.02); transform: translateY(-2px); }

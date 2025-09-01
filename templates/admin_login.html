@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+      body { padding: 28px; font-family: Inter, sans-serif; background: #071529; color: #e6eef8 }
+      form { max-width:360px; margin:40px auto; }
+      label { display:block; margin-top:10px }
+      input { width:100%; padding:10px; margin-top:6px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.02); color:inherit }
+      .btn-primary { display:block; width:100%; margin-top:18px }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1 style="text-align:center">Panel de Administración</h1>
+      <form method="post" action="/admin/login" aria-label="Admin login form">
+        <label for="email">Correo electrónico</label>
+        <input id="email" name="email" type="email" placeholder="correo@ejemplo.com" required />
+
+        <label for="password">Contraseña</label>
+        <input id="password" name="password" type="password" required />
+
+        <button type="submit" class="btn-primary">Iniciar sesión</button>
+      </form>
+  <!-- hint removed for security -->
+    </main>
+  </body>
+</html>
