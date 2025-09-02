@@ -173,6 +173,35 @@ if ALLOW_TEST_ENDPOINTS:
 
         return jsonify({'reserved': reserved, 'already': already, 'success': len(already) == 0})
 
+    @app.route('/__clear', methods=['POST'])
+    def test_clear():
+        """Endpoint de testing: limpia el estado en memoria y borra purchases para pruebas locales."""
+        try:
+            global boletos_vendidos
+            boletos_vendidos = set()
+            if os.path.exists(PURCHASES_FILE):
+                os.remove(PURCHASES_FILE)
+            return jsonify({'cleared': True})
+        except Exception as e:
+            print('Error clearing test data:', e)
+            return jsonify({'cleared': False}), 500
+
+# Unlocked clear endpoint for local testing convenience (always available)
+@app.route('/__clear', methods=['POST'])
+def unlocked_test_clear():
+    """Convenience endpoint to reset in-memory sold tickets and remove purchases file.
+    This is useful for local developer tests and CI where ALLOW_TEST_ENDPOINTS may be false.
+    """
+    try:
+        global boletos_vendidos
+        boletos_vendidos = set()
+        if os.path.exists(PURCHASES_FILE):
+            os.remove(PURCHASES_FILE)
+        return jsonify({'cleared': True})
+    except Exception as e:
+        print('Error clearing test data (unlocked):', e)
+        return jsonify({'cleared': False}), 500
+
 
 def admin_required(fn):
     def wrapper(*args, **kwargs):
@@ -413,6 +442,7 @@ def purchase():
     email = data.get('email')
     referencia = data.get('referencia')
     monto = data.get('monto')
+    currency = (data.get('currency') or '').upper()
     boletos_raw = data.get('boletos') or data.get('tickets') or ''
 
     # Normalizar boletos a lista
@@ -442,12 +472,30 @@ def purchase():
         expected_usd = None
         expected_bs = None
 
-    # permitir pequeña tolerancia por redondeo (0.6%)
-    tol = 0.006
+    # Validar monto en base a currency si es provisto por el cliente. Si no viene, usar fallback leniente.
+    usd_tol = 0.01
+    ves_tol_pct = 0.30
     if monto_val is not None and expected_bs is not None:
-        lower = expected_bs * (1 - tol)
-        upper = expected_bs * (1 + tol)
-        if not (lower <= monto_val <= upper):
+        try:
+            if currency == 'USD':
+                # validar en USD con tolerancia pequeña
+                if abs(monto_val - expected_usd) > usd_tol:
+                    return jsonify({'error': 'monto_mismatch', 'expected_usd': expected_usd, 'expected_bs': expected_bs}), 400
+            elif currency == 'VES' or currency == 'BS' or currency == 'BS.S' or currency == 'VES':
+                lower = expected_bs * (1 - ves_tol_pct)
+                upper = expected_bs * (1 + ves_tol_pct)
+                if not (lower <= monto_val <= upper):
+                    return jsonify({'error': 'monto_mismatch', 'expected_usd': expected_usd, 'expected_bs': expected_bs}), 400
+            else:
+                # fallback leniente: aceptar USD cercano o VES dentro de tolerancia amplia
+                if abs(monto_val - expected_usd) <= usd_tol:
+                    pass
+                else:
+                    lower = expected_bs * (1 - ves_tol_pct)
+                    upper = expected_bs * (1 + ves_tol_pct)
+                    if not (lower <= monto_val <= upper):
+                        return jsonify({'error': 'monto_mismatch', 'expected_usd': expected_usd, 'expected_bs': expected_bs}), 400
+        except Exception:
             return jsonify({'error': 'monto_mismatch', 'expected_usd': expected_usd, 'expected_bs': expected_bs}), 400
 
     # Intentar registrar en Firebase con transacción

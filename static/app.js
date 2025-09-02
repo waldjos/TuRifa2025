@@ -91,8 +91,20 @@ document.addEventListener("DOMContentLoaded", () => {
         actualizarTotal();
     }
 
-    prevBtn?.addEventListener('click', () => { if (pageIndex > 0) { pageIndex--; renderGrid(); } });
-    nextBtn?.addEventListener('click', () => { if ((pageIndex + 1) * perPage < boletosDisponibles.length) { pageIndex++; renderGrid(); } });
+    prevBtn?.addEventListener('click', () => {
+        if (pageIndex > 0) {
+            const target = pageIndex - 1;
+            const html = `<p>Navegarás a la página ${target + 1}.</p><p>¿Confirmas?</p>`;
+            showActionPanel('Ir a página anterior', html, () => { pageIndex = target; renderGrid(); }, () => {});
+        }
+    });
+    nextBtn?.addEventListener('click', () => {
+        if ((pageIndex + 1) * perPage < boletosDisponibles.length) {
+            const target = pageIndex + 1;
+            const html = `<p>Navegarás a la página ${target + 1}.</p><p>¿Confirmas?</p>`;
+            showActionPanel('Ir a página siguiente', html, () => { pageIndex = target; renderGrid(); }, () => {});
+        }
+    });
     perPageEl?.addEventListener('change', () => { pageIndex = 0; renderGrid(); });
 
     function showPopup(message, duration = 3000) {
@@ -155,6 +167,83 @@ document.addEventListener("DOMContentLoaded", () => {
         popup.innerHTML = `<a href="https://wa.me/584142677345" class="btn-whatsapp">📲 Contactar por WhatsApp</a>`;
         popup.classList.add("show");
         setTimeout(() => popup.classList.remove("show"), 6000);
+    });
+
+    // Action panel helper
+    const actionPanel = document.getElementById('action-panel');
+    function showActionPanel(title, html, onConfirm, onCancel) {
+        if (!actionPanel) return;
+        actionPanel.innerHTML = `<h3>${title}</h3><div class="content">${html}</div><div class="actions"><button class="cancel">Cancelar</button><button class="confirm">Confirmar</button></div>`;
+        actionPanel.classList.add('show');
+        actionPanel.setAttribute('aria-hidden', 'false');
+        const cancelBtn = actionPanel.querySelector('.cancel');
+        const confirmBtn = actionPanel.querySelector('.confirm');
+        const cleanup = () => { actionPanel.classList.remove('show'); actionPanel.setAttribute('aria-hidden','true'); actionPanel.innerHTML=''; };
+        cancelBtn.addEventListener('click', () => { cleanup(); if (onCancel) onCancel(); });
+        confirmBtn.addEventListener('click', () => { cleanup(); if (onConfirm) onConfirm(); });
+    }
+
+    // Payment panel data (Yhoendri Aponte)
+    const PAYMENT_INFO = {
+        zelle: {
+            title: 'Zelle',
+            name: 'Yhoendri Aponte',
+            payload: '+1-678-749-16-42',
+            note: 'ZELLE'
+        },
+        pagomovil: {
+            title: 'PagoMóvil (Banco de Venezuela)',
+            name: 'Yhoendri Aponte',
+            account: '0134',
+            cedula: '22017682',
+            telefono: '04129172646'
+        }
+    };
+
+    function formatCurrency(amount, currency){
+        if (currency === 'USD') return amount.toFixed(2) + ' USD';
+        return Math.round(amount).toLocaleString('es-VE') + ' Bs';
+    }
+
+    function showPaymentPanel(method){
+        const info = PAYMENT_INFO[method];
+        if (!info) return;
+        const overlay = document.getElementById('payment-overlay');
+        const panel = document.getElementById('payment-panel');
+        const currency = (document.getElementById('currency')?.value) || 'USD';
+    const cantidad = boletosSeleccionados.size || parseInt(document.getElementById('numero-boletos').value) || 0;
+    if (cantidad < 1) { showPopup('Selecciona al menos 1 boleto antes de ver opciones de pago.',4000); return; }
+        const amountUSD = cantidad * costoBoletoUSD;
+        const rate = getRate();
+        const amountVES = Math.round(amountUSD * rate);
+
+        let html = `<button class="close" aria-label="Cerrar">✕</button><h3>Pagar con ${info.title}</h3>`;
+        html += `<p><strong>${info.name}</strong></p>`;
+        if (method === 'zelle'){
+            html += `<p>Cuenta: ${info.payload}</p>`;
+        } else {
+            html += `<p>Cuenta: ${info.account}<br/>Cédula: ${info.cedula}<br/>Teléfono: ${info.telefono}</p>`;
+        }
+        html += `<div class="field"><label>Monto a transferir</label><div class="amount">${currency === 'USD' ? formatCurrency(amountUSD,'USD') : formatCurrency(amountVES,'VES')}</div></div>`;
+        html += `<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;"><button class="copy-btn" data-copy="${method}">Copiar datos</button><button class="copy-btn" id="pay-close">Cerrar</button></div>`;
+        panel.innerHTML = html;
+        overlay.style.display = 'block'; panel.style.display = 'block'; panel.setAttribute('aria-hidden','false');
+
+        panel.querySelector('.close').addEventListener('click', () => { overlay.style.display='none'; panel.style.display='none'; panel.setAttribute('aria-hidden','true'); });
+        panel.querySelector('#pay-close').addEventListener('click', () => { overlay.style.display='none'; panel.style.display='none'; panel.setAttribute('aria-hidden','true'); });
+        panel.querySelector('.copy-btn')?.addEventListener('click', (e) => {
+            if (method === 'zelle') navigator.clipboard.writeText(info.payload);
+            else navigator.clipboard.writeText(`${info.account} | Cédula: ${info.cedula} | Tel: ${info.telefono}`);
+            showPopup('📋 Datos copiados al portapapeles', 2500);
+        });
+    }
+
+    // Wire payment icons
+    document.querySelectorAll('.pay-icon').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const m = btn.dataset.pay;
+            showPaymentPanel(m);
+        });
     });
 
     document.querySelectorAll("nav ul li a").forEach(button => {
@@ -264,6 +353,19 @@ document.addEventListener("DOMContentLoaded", () => {
             localStorage.setItem('turifa_currency', e.target.value);
             actualizarTotal();
         });
+
+        // Currency toggle near monto input
+        const montoCurrency = document.getElementById('monto-currency');
+        if (montoCurrency) {
+            montoCurrency.querySelectorAll('.cur-btn').forEach(b => {
+                b.addEventListener('click', () => {
+                    montoCurrency.querySelectorAll('.cur-btn').forEach(x => x.classList.remove('active'));
+                    b.classList.add('active');
+                    const c = b.dataset.currency || 'USD';
+                    if (currencySelect) { currencySelect.value = c; currencySelect.dispatchEvent(new Event('change')); }
+                });
+            });
+        }
     }
 
     // Use RATE if available otherwise fallback to tasaDolar variable
@@ -291,6 +393,46 @@ document.addEventListener("DOMContentLoaded", () => {
             if (j && typeof j.sold === 'number') actualizarProgresoUI(j.sold);
         }).catch(()=>{});
     }, 8000);
+
+    // Carga inicial de la tasa y sincroniza la preferencia de moneda
+    async function loadRateAndCurrency() {
+        try {
+            const resp = await fetch('/api/rates');
+            if (!resp.ok) throw new Error('no rates');
+            const j = await resp.json();
+            if (j && typeof j.rate === 'number') {
+                window.RATE = j.rate;
+                const rd = document.getElementById('rate-display');
+                if (rd) rd.innerText = j.rate.toString();
+                const ru = document.getElementById('rate-updated');
+                if (ru) ru.innerText = j.updated_at || '--';
+
+                // badge
+                const container = document.getElementById('rate-badge-container');
+                if (container) {
+                    container.innerHTML = '';
+                    const span = document.createElement('span');
+                    span.className = 'rate-badge ok';
+                    span.innerText = 'Tasa OK';
+                    container.appendChild(span);
+                }
+            }
+        } catch (e) {
+            // keep defaults
+            const container = document.getElementById('rate-badge-container');
+            if (container) {
+                container.innerHTML = '';
+                const span = document.createElement('span');
+                span.className = 'rate-badge stale';
+                span.innerText = 'Tasa no disponible';
+                container.appendChild(span);
+            }
+        }
+        // ensure currency select reflects stored pref
+        const pref = localStorage.getItem('turifa_currency') || 'USD';
+        const currencySelect = document.getElementById('currency');
+        if (currencySelect) currencySelect.value = pref;
+    }
 
     // ensure rate and currency pref loaded
     loadRateAndCurrency();
@@ -328,22 +470,27 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        boletosSeleccionados.clear();
-        document.getElementById("lista-numeros").innerHTML = "";
-
-        while (boletosSeleccionados.size < cantidad) {
+        // build candidate list without committing
+        const candidates = new Set();
+        while (candidates.size < cantidad) {
             const random = boletosDisponibles[Math.floor(Math.random() * boletosDisponibles.length)];
-            if (!boletosSeleccionados.has(random)) {
-                boletosSeleccionados.add(random);
-                const li = document.createElement("li");
-                li.innerText = `Boleto: ${random}`;
-                document.getElementById("lista-numeros").appendChild(li);
-            }
+            candidates.add(random);
         }
-
-        document.getElementById("boletos-seleccionados").innerText = boletosSeleccionados.size;
-        document.getElementById("boletos").value = Array.from(boletosSeleccionados).join(", ");
-        actualizarTotal();
+        const html = `<p>Se han seleccionado aleatoriamente ${cantidad} boletos:</p><ul>` + Array.from(candidates).map(n => `<li>${n}</li>`).join('') + `</ul><p>Confirma para aplicarlos a tu selección.</p>`;
+        showActionPanel('Selección Aleatoria', html, () => {
+            // onConfirm: apply selection
+            boletosSeleccionados.clear();
+            document.getElementById("lista-numeros").innerHTML = "";
+            Array.from(candidates).forEach(n => {
+                boletosSeleccionados.add(n);
+                const li = document.createElement("li"); li.innerText = `Boleto: ${n}`; document.getElementById("lista-numeros").appendChild(li);
+            });
+            document.getElementById("boletos-seleccionados").innerText = boletosSeleccionados.size;
+            document.getElementById("boletos").value = Array.from(boletosSeleccionados).join(", ");
+            actualizarTotal();
+        }, () => {
+            // onCancel: do nothing
+        });
     });
 
     document.getElementById("numero-boletos").addEventListener("input", actualizarTotal);
@@ -374,6 +521,7 @@ document.addEventListener("DOMContentLoaded", () => {
             email: document.getElementById('email').value,
             referencia: document.getElementById('referencia').value,
             monto: document.getElementById('monto').value,
+            currency: (document.getElementById('currency')?.value) || 'USD',
             boletos: nuevosBoletos
         };
 

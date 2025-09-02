@@ -135,6 +135,90 @@
     background: rgba(255,255,255,0.02);
     color: var(--surface);
   }
+
+  /* Modern form layout: two columns on wide screens */
+  .field {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 12px 18px;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+
+  .field label { margin: 0; }
+
+  /* For stacked fields (like boletos selection area) allow full width override */
+  .field.full {
+    grid-template-columns: 1fr;
+  }
+
+  .monto-row { display:flex; gap:8px; align-items:center; }
+  .currency-toggle { display:flex; border-radius:8px; overflow:hidden; border:1px solid rgba(255,255,255,0.06); }
+  .currency-toggle .cur-btn { padding:8px 10px; background:transparent; border:none; color:var(--surface); cursor:pointer; }
+  .currency-toggle .cur-btn.active { background: linear-gradient(90deg,var(--brand),var(--accent)); color:#fff; }
+
+  /* Make inputs more prominent and touch friendly */
+  input[type="text"], input[type="email"], input[type="tel"], input[type="number"], select {
+    padding: 14px 12px;
+    font-size: 15px;
+    border-radius: 10px;
+  }
+
+  /* Focus & validation states */
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--brand);
+    box-shadow: 0 6px 22px rgba(14,165,164,0.06);
+    outline: none;
+  }
+
+  input:invalid {
+    border-color: rgba(239,68,68,0.9);
+    box-shadow: 0 2px 10px rgba(239,68,68,0.06);
+  }
+
+  /* Checkbox and label layout */
+  .checkbox-container {
+    display:flex;
+    gap:10px;
+    align-items:center;
+    margin-top:18px;
+  }
+
+  .checkbox-container input[type="checkbox"] {
+    width:18px; height:18px; accent-color: var(--brand);
+  }
+
+  .checkbox-container label { font-size:14px; color:var(--surface); }
+  .checkbox-container label a { color: #9ad7d4; text-decoration:underline; }
+
+  /* Primary submit button styling */
+  #button {
+    margin-top:14px;
+    padding:14px 18px;
+    font-size:16px;
+    border-radius:12px;
+    border:none;
+    cursor:pointer;
+    display:inline-block;
+  }
+
+  /* Ensure confirm button stands out and full-width on mobile */
+  #button.btn-primary { box-shadow: 0 10px 30px rgba(14,165,164,0.12); }
+
+  /* Small helpers */
+  .field .help { font-size:12px; color:var(--muted); }
+
+  /* On narrow screens make the form single-column */
+  @media (max-width: 900px) {
+    .field { grid-template-columns: 1fr; }
+    .booking-controls { padding: 14px; }
+    .field input, .field select { width: 100%; }
+    #button { width: 100%; }
+  }
+
+  /* Micro-typography and spacing tweaks to match mock */
+  .field label { color: rgba(255,255,255,0.9); font-weight:700; }
+  .totals { color: #fff; }
   
   input:focus {
     border-color: var(--brand);
@@ -187,6 +271,60 @@
   .pago-opcion:hover {
     transform: scale(1.02);
   }
+
+  /* Modern small variant for primary buttons used in controls */
+  .btn-primary.small {
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 10px;
+  }
+
+  /* Pager buttons */
+  .pager button { background: linear-gradient(90deg,var(--brand),var(--accent)); color:#fff; border:none; padding:8px 12px; border-radius:10px; cursor:pointer; }
+
+  /* Action panel (toast/modal hybrid) */
+  .action-panel {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    min-width: 320px;
+    max-width: 420px;
+    background: linear-gradient(180deg, rgba(8,12,24,0.98), rgba(6,10,20,0.96));
+    color: #fff;
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(2,6,23,0.6);
+    transform: translateY(18px) scale(.98);
+    opacity: 0; pointer-events: none;
+    transition: all 220ms ease;
+    z-index: 10000;
+  }
+  .action-panel.show { transform: none; opacity: 1; pointer-events: auto; }
+  .action-panel h3 { margin-bottom:8px; font-size:16px; }
+  .action-panel p { margin-bottom:12px; color: rgba(255,255,255,0.9); }
+  .action-panel .actions { display:flex; gap:8px; justify-content:flex-end; }
+  .action-panel .actions button { padding:8px 12px; border-radius:8px; border: none; cursor:pointer; }
+  .action-panel .actions .cancel { background: transparent; border:1px solid rgba(255,255,255,0.08); color: #fff; }
+  .action-panel .actions .confirm { background: linear-gradient(90deg,var(--brand),var(--accent)); color:#fff; }
+
+  /* Payment icons in controls */
+  .payment-icons { display:flex; gap:8px; align-items:center; margin-left:8px; }
+  .pay-icon { background:transparent; border:none; padding:6px; border-radius:8px; cursor:pointer; }
+  .pay-icon img { width:34px; height:34px; display:block; }
+
+  /* Payment overlay panel */
+  .payment-panel {
+    position: fixed; left: 50%; top: 50%; transform: translate(-50%,-50%);
+    width: 360px; max-width: 92%; background: linear-gradient(180deg, rgba(8,12,24,0.98), rgba(6,10,20,0.96));
+    padding: 18px; border-radius: 12px; box-shadow: 0 30px 80px rgba(2,6,23,0.7); z-index: 12000;
+    color: #fff;
+  }
+  .payment-panel h3 { margin-top:0; }
+  .payment-panel .field { margin-bottom:10px; }
+  .payment-panel .copy-btn { padding:8px 10px; border-radius:8px; background: linear-gradient(90deg,var(--brand),var(--accent)); color:#fff; border:none; cursor:pointer; }
+  .payment-panel .close { position:absolute; right:10px; top:10px; background:transparent; border:none; color:rgba(255,255,255,0.7); }
+
+  .payment-overlay { position:fixed; left:0; top:0; right:0; bottom:0; background: rgba(0,0,0,0.45); z-index:11900; }
   
   .pago-opcion img {
     max-width: 80px;
@@ -315,3 +453,47 @@
   .ticket-btn { padding: 14px 10px; font-size: 16px; }
   nav ul { gap: 8px; }
 }
+
+/* Booking / ticket selection modern styles */
+.section-card {
+  margin: 20px 0 28px;
+}
+.booking-grid {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+.booking-controls {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  padding: 18px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+.booking-controls .form-row { margin-bottom: 12px; }
+.controls-row { display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
+.controls-row .left-controls { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.controls-row label { font-weight:600; margin-left:6px; }
+.controls-row select { padding:8px; border-radius:8px; background: rgba(255,255,255,0.02); color:var(--surface); border:1px solid rgba(255,255,255,0.04); }
+.right-controls { text-align:right; display:flex; flex-direction:column; gap:8px; align-items:flex-end; }
+.pager button { padding:8px 12px; border-radius:8px; background:transparent; border:1px solid rgba(255,255,255,0.06); color:var(--surface); }
+.picked-list { list-style:none; display:block; max-height:120px; overflow:auto; padding-left:6px; margin-bottom:6px; }
+.picked-list li { padding:6px 0; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace; }
+.totals { font-weight:700; margin-top:6px; }
+.grid-wrap { background: transparent; }
+#ticket-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap:10px; }
+.ticket-btn { width:100%; display:flex; align-items:center; justify-content:center; }
+
+/* Small screens: stack controls over grid */
+@media (max-width: 900px) {
+  .booking-grid { grid-template-columns: 1fr; }
+  .right-controls { align-items:flex-start; text-align:left; }
+  .controls-row { align-items:flex-start; }
+  .booking-controls { order: 1; }
+  .grid-wrap { order: 2; }
+}
+
+/* Slight visual tweak for modern look */
+.booking-controls { box-shadow: 0 12px 40px rgba(2,6,23,0.55); }
+.ticket-btn { transition: transform .12s ease, box-shadow .12s ease; }
+.ticket-btn:active { transform: translateY(1px); }

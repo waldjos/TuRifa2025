@@ -180,44 +180,63 @@
     </section>
 
     <!-- Selección de boletos -->
-    <section>
+    <section class="section-card">
       <h2 id="ticket-grid">BOLETOS DISPONIBLES</h2>
-      <form id="boletos-form" aria-labelledby="ticket-grid">
-        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
-          <label for="numero-boletos">Número de boletos (mínimo 2):</label>
-          <input type="number" id="numero-boletos" name="numero-boletos" min="1" value="2" aria-describedby="numero-help" />
-          <div id="numero-help" class="sr-only">Selecciona mínimo 2 boletos según reglas</div>
-          <button type="button" id="btn-azar">Elegir Boletos</button>
 
-          <label for="per-page" style="margin-left:8px">Ver por página:</label>
-          <select id="per-page">
-            <option value="50">50</option>
-            <option value="100" selected>100</option>
-            <option value="200">200</option>
-          </select>
+      <div class="booking-grid">
+        <!-- Left: controls & form -->
+        <aside class="booking-controls">
+          <form id="boletos-form" aria-labelledby="ticket-grid">
+            <div class="form-row">
+              <label for="numero-boletos">Número de boletos (mínimo 2)</label>
+              <input type="number" id="numero-boletos" name="numero-boletos" min="1" value="2" aria-describedby="numero-help" />
+              <div id="numero-help" class="sr-only">Selecciona mínimo 2 boletos según reglas</div>
+            </div>
 
-          <label for="currency" style="margin-left:8px">Moneda:</label>
-          <select id="currency">
-            <option value="USD">USD</option>
-            <option value="VES">Bs</option>
-          </select>
+            <div class="controls-row">
+              <div class="left-controls">
+                <button type="button" id="btn-azar" class="btn-primary small">Elegir boletos</button>
+                <label for="per-page">Ver por página</label>
+                <select id="per-page">
+                  <option value="50">50</option>
+                  <option value="100" selected>100</option>
+                  <option value="200">200</option>
+                </select>
+                <label for="currency">Moneda</label>
+                <select id="currency">
+                  <option value="USD">USD</option>
+                  <option value="VES">Bs</option>
+                </select>
+                <!-- Payment quick icons -->
+                <div class="payment-icons" aria-hidden="false">
+                  <button type="button" class="pay-icon" data-pay="zelle" title="Pagar con Zelle"><img src="{{ url_for('static', filename='zelle.png') }}" alt="Zelle"/></button>
+                  <button type="button" class="pay-icon" data-pay="pagomovil" title="Pagar con PagoMovil"><img src="{{ url_for('static', filename='pagomovil.png') }}" alt="PagoMovil"/></button>
+                </div>
+              </div>
+              <div class="right-controls" aria-live="polite">
+                <div class="selected-count">Seleccionados: <strong id="boletos-seleccionados">0</strong></div>
+                <div class="pager">
+                  <button type="button" id="page-prev">Anterior</button>
+                  <button type="button" id="page-next">Siguiente</button>
+                  <span class="page-ind">Página <span id="page-index">1</span></span>
+                </div>
+              </div>
+            </div>
 
-          <div aria-live="polite" style="margin-left:auto">Seleccionados: <span id="boletos-seleccionados">0</span></div>
+            <div class="summary-row">
+              <ul id="lista-numeros" aria-live="polite" class="picked-list"></ul>
+              <div class="totals">Total: <span id="total-usd">0 USD</span> — <span id="total-bolivares">0</span> Bs</div>
+            </div>
+          </form>
+        </aside>
+
+        <!-- Right: ticket grid -->
+        <div class="grid-wrap">
+          <div id="ticket-grid" role="grid" aria-label="Cuadrícula de boletos">
+            <!-- botones de boletos generados por JS -->
+          </div>
         </div>
-
-        <div id="ticket-grid-controls" style="margin-top:8px;display:flex;gap:8px;align-items:center;">
-          <button type="button" id="page-prev">Anterior</button>
-          <button type="button" id="page-next">Siguiente</button>
-          <div style="margin-left:8px">Página <span id="page-index">1</span></div>
-        </div>
-
-  <div id="ticket-grid" role="grid" aria-label="Cuadrícula de boletos" style="margin-top:12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:8px;">
-          <!-- botones de boletos generados por JS -->
-        </div>
-
-  <ul id="lista-numeros" aria-live="polite" style="margin-top:10px;"></ul>
-  <p><strong>Total:</strong> <span id="total-usd">0 USD</span> — <span id="total-bolivares">0</span> Bs</p>
-      </form>
+      </div>
     </section>
 
     <!-- Formulario -->
@@ -250,7 +269,13 @@
         </div>
         <div class="field">
           <label for="monto">Monto Transferido</label>
-          <input type="number" name="monto" id="monto" required>
+          <div class="monto-row">
+            <input type="number" name="monto" id="monto" required>
+            <div class="currency-toggle" id="monto-currency">
+              <button type="button" class="cur-btn active" data-currency="USD">USD</button>
+              <button type="button" class="cur-btn" data-currency="VES">Bs</button>
+            </div>
+          </div>
         </div>
 
         <div class="checkbox-container">
@@ -273,10 +298,7 @@
         <img src="{{ url_for('static', filename='pagomovil.png') }}" alt="PagoMóvil" class="pago-opcion" />
         <p>Banco de Venezuela<br />Cédula: 30464428<br />Teléfono: 04142677345</p>
       </div>
-      <div class="pago-opcion">
-        <img src="{{ url_for('static', filename='Paypal.png') }}" alt="Bizum" class="pago-opcion" />
-        <p>Bizum: +34634124539</p>
-      </div>
+  <!-- Removed third payment method to keep only Zelle and PagoMovil -->
     </section>
   </main>
 
@@ -287,6 +309,12 @@
 
   <!-- Contenedor de mensajes -->
   <div id="popup"></div>
+  <!-- Panel moderno de acciones (feedback para botones) -->
+  <div id="action-panel" class="action-panel" aria-live="polite" aria-hidden="true"></div>
+
+  <!-- Payment overlay and panel -->
+  <div id="payment-overlay" class="payment-overlay" style="display:none"></div>
+  <div id="payment-panel" class="payment-panel" style="display:none" aria-hidden="true"></div>
 
 </body>
 </html>

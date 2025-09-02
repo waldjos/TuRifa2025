@@ -6,6 +6,10 @@ const fetch = require('node-fetch');
   const ticketsB = ['2000'];
 
   console.log('Lanzando 2 compras concurrentes para el mismo ticket');
+  // Intentar limpiar estado previo si endpoint de test disponible
+  try {
+    await fetch(BASE + '/__clear', { method: 'POST' });
+  } catch(e) {}
 
   const payloadA = { nombre: 'A', telefono: '1', email: 'a@a.com', boletos: ticketsA, referencia: 'A', monto: 130 };
   const payloadB = { nombre: 'B', telefono: '2', email: 'b@b.com', boletos: ticketsB, referencia: 'B', monto: 130 };
