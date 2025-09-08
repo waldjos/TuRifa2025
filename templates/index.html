@@ -196,12 +196,6 @@
             <div class="controls-row">
               <div class="left-controls">
                 <button type="button" id="btn-azar" class="btn-primary small">Elegir boletos</button>
-                <label for="per-page">Ver por página</label>
-                <select id="per-page">
-                  <option value="50">50</option>
-                  <option value="100" selected>100</option>
-                  <option value="200">200</option>
-                </select>
                 <label for="currency">Moneda</label>
                 <select id="currency">
                   <option value="USD">USD</option>
@@ -210,11 +204,6 @@
               </div>
               <div class="right-controls" aria-live="polite">
                 <div class="selected-count">Seleccionados: <strong id="boletos-seleccionados">0</strong></div>
-                <div class="pager">
-                  <button type="button" id="page-prev">Anterior</button>
-                  <button type="button" id="page-next">Siguiente</button>
-                  <span class="page-ind">Página <span id="page-index">1</span></span>
-                </div>
               </div>
             </div>
 
@@ -225,12 +214,6 @@
           </form>
         </aside>
 
-        <!-- Right: ticket grid -->
-        <div class="grid-wrap">
-          <div id="ticket-grid" role="grid" aria-label="Cuadrícula de boletos">
-            <!-- botones de boletos generados por JS -->
-          </div>
-        </div>
       </div>
     </section>
 
