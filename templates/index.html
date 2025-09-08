@@ -207,11 +207,6 @@
                   <option value="USD">USD</option>
                   <option value="VES">Bs</option>
                 </select>
-                <!-- Payment quick icons -->
-                <div class="payment-icons" aria-hidden="false">
-                  <button type="button" class="pay-icon" data-pay="zelle" title="Pagar con Zelle"><img src="{{ url_for('static', filename='zelle.png') }}" alt="Zelle"/></button>
-                  <button type="button" class="pay-icon" data-pay="pagomovil" title="Pagar con PagoMovil"><img src="{{ url_for('static', filename='pagomovil.png') }}" alt="PagoMovil"/></button>
-                </div>
               </div>
               <div class="right-controls" aria-live="polite">
                 <div class="selected-count">Seleccionados: <strong id="boletos-seleccionados">0</strong></div>
@@ -287,19 +282,6 @@
       </form>
     </section>
 
-    <!-- Métodos de Pago -->
-    <section id="metodos-pago">
-      <h2>Métodos de Pago</h2>
-      <div class="pago-opcion">
-        <img src="{{ url_for('static', filename='zelle.png') }}" alt="Zelle" class="pago-opcion" />
-        <p>Zelle: cedeno587269@gmail.com<br />Nombre: Luis Duran</p>
-      </div>
-      <div class="pago-opcion">
-        <img src="{{ url_for('static', filename='pagomovil.png') }}" alt="PagoMóvil" class="pago-opcion" />
-        <p>Banco de Venezuela<br />Cédula: 30464428<br />Teléfono: 04142677345</p>
-      </div>
-  <!-- Removed third payment method to keep only Zelle and PagoMovil -->
-    </section>
   </main>
 
   <!-- Pie de página -->
