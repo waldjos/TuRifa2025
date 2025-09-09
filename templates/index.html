@@ -149,7 +149,7 @@
   <p class="animated-text" style="font-size:20px;margin-top:6px"><strong>Premio principal: $1,000</strong></p>
   <p style="margin-top:12px;color:rgba(255,255,255,0.8)">Compra tus boletos en USD o Bs y participa en el sorteo público de <strong>SUPER GANA</strong>. Transmisión en vivo y verificación pública del seed aleatorio.</p>
   <p style="margin-top:8px;color:rgba(255,255,255,0.7);font-size:14px">Soporte: La validación de tu participación puede tardar entre <strong>12 a 24 horas</strong>.</p>
-        <div style="margin-top:18px"><a class="btn-primary" href="#ticket-grid">Seleccionar boletos</a></div>
+        <div style="margin-top:18px"><a class="btn-primary" href="#ticket-grid-title">Seleccionar boletos</a></div>
       </div>
       <div style="width:46%">
         <div class="card-3d" style="padding:18px;border-radius:14px;">
@@ -181,12 +181,12 @@
 
     <!-- Selección de boletos -->
     <section class="section-card">
-      <h2 id="ticket-grid">BOLETOS DISPONIBLES</h2>
+      <h2 id="ticket-grid-title">BOLETOS DISPONIBLES</h2>
 
       <div class="booking-grid">
         <!-- Left: controls & form -->
         <aside class="booking-controls">
-          <form id="boletos-form" aria-labelledby="ticket-grid">
+          <form id="boletos-form" aria-labelledby="ticket-grid-title">
             <div class="form-row">
               <label for="numero-boletos">Número de boletos (mínimo 2)</label>
               <input type="number" id="numero-boletos" name="numero-boletos" min="1" value="2" aria-describedby="numero-help" />
@@ -201,6 +201,17 @@
                   <option value="USD">USD</option>
                   <option value="VES">Bs</option>
                 </select>
+                <div class="page-controls" style="margin-top: 10px;">
+                  <button id="page-prev" type="button" class="btn-secondary small">Prev</button>
+                  <span id="page-index">1</span>
+                  <button id="page-next" type="button" class="btn-secondary small">Next</button>
+                  <label for="per-page" style="margin-left: 10px;">Por página:</label>
+                  <select id="per-page">
+                    <option value="100">100</option>
+                    <option value="200">200</option>
+                    <option value="500">500</option>
+                  </select>
+                </div>
               </div>
               <div class="right-controls" aria-live="polite">
                 <div class="selected-count">Seleccionados: <strong id="boletos-seleccionados">0</strong></div>
@@ -213,6 +224,9 @@
             </div>
           </form>
         </aside>
+
+        <!-- Right: ticket grid -->
+        <div id="ticket-grid" class="ticket-grid"></div>
       </div>
 
     <!-- Métodos de pago -->
