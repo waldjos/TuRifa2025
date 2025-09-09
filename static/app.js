@@ -187,7 +187,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // Modify form submit to include payment method and details
     document.getElementById('form').addEventListener('submit', function (event) {
         event.preventDefault();
-        const btn = document.getElementById('button');
         btn.value = 'Enviando...';
 
         const nuevosBoletos = Array.from(boletosSeleccionados);
@@ -223,16 +222,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     prevBtn?.addEventListener('click', () => {
         if (pageIndex > 0) {
-            const target = pageIndex - 1;
-            const html = `<p>Navegarás a la página ${target + 1}.</p><p>¿Confirmas?</p>`;
-            showActionPanel('Ir a página anterior', html, () => { pageIndex = target; renderGrid(); }, () => {});
+            pageIndex--;
+            renderGrid();
         }
     });
     nextBtn?.addEventListener('click', () => {
         if ((pageIndex + 1) * perPage < boletosDisponibles.length) {
-            const target = pageIndex + 1;
-            const html = `<p>Navegarás a la página ${target + 1}.</p><p>¿Confirmas?</p>`;
-            showActionPanel('Ir a página siguiente', html, () => { pageIndex = target; renderGrid(); }, () => {});
+            pageIndex++;
+            renderGrid();
         }
     });
     perPageEl?.addEventListener('change', () => { pageIndex = 0; renderGrid(); });
