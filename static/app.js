@@ -38,7 +38,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const prevBtn = document.getElementById('page-prev');
     const nextBtn = document.getElementById('page-next');
 
-    /*
     function renderGrid() {
         if (!grid) return;
         grid.innerHTML = '';
@@ -67,7 +66,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         pageIndexEl.innerText = pageIndex + 1;
     }
-    */
 
     function toggleTicket(num, btn) {
         // simple hold logic: if already selected, unselect and release hold
