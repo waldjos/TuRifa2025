@@ -95,42 +95,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // New code to handle payment method selection and dynamic fields
     const paymentMethodRadios = document.querySelectorAll('input[name="payment-method"]');
-    const paymentDetailsDiv = document.getElementById('payment-details');
+    const pagomovilDetails = document.getElementById('pagomovil-details');
+    const zelleDetails = document.getElementById('zelle-details');
 
     function updatePaymentDetails() {
         const selectedMethod = document.querySelector('input[name="payment-method"]:checked')?.value;
         if (!selectedMethod) {
-            paymentDetailsDiv.innerHTML = '';
+            pagomovilDetails.style.display = 'none';
+            zelleDetails.style.display = 'none';
             return;
         }
         if (selectedMethod === 'pagomovil') {
-            paymentDetailsDiv.innerHTML = `
-                <div class="field">
-                    <label for="pm-phone">Número de teléfono (Pago Móvil)</label>
-                    <input type="tel" id="pm-phone" name="pm-phone" placeholder="0412xxxxxxx" required />
-                </div>
-                <div class="field">
-                    <label for="pm-bank">Banco</label>
-                    <select id="pm-bank" name="pm-bank" required>
-                        <option value="">Seleccione banco</option>
-                        <option value="bdv">Banco de Venezuela</option>
-                        <option value="banco-bicentenario">Banco Bicentenario</option>
-                        <option value="mercantil">Mercantil</option>
-                        <option value="provincial">Provincial</option>
-                        <!-- Agregar más bancos si es necesario -->
-                    </select>
-                </div>
-            `;
+            pagomovilDetails.style.display = 'block';
+            zelleDetails.style.display = 'none';
         } else if (selectedMethod === 'zelle') {
-            paymentDetailsDiv.innerHTML = `
-                <div class="field">
-                    <label for="zelle-email">Correo electrónico o teléfono (Zelle)</label>
-                    <input type="text" id="zelle-email" name="zelle-email" placeholder="ejemplo@correo.com o +1-xxx-xxx-xxxx" required />
-                </div>
-            `;
+            pagomovilDetails.style.display = 'none';
+            zelleDetails.style.display = 'block';
         } else {
-            paymentDetailsDiv.innerHTML = '';
+            pagomovilDetails.style.display = 'none';
+            zelleDetails.style.display = 'none';
         }
+        syncAmounts();
     }
 
     paymentMethodRadios.forEach(radio => {
@@ -138,6 +123,68 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     updatePaymentDetails();
+
+    // Copy button functionality
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('copy-btn')) {
+            const copyType = e.target.getAttribute('data-copy');
+            let textToCopy = '';
+            if (copyType === 'pagomovil-cedula') {
+                textToCopy = '22017682';
+            } else if (copyType === 'pagomovil-telefono') {
+                textToCopy = '04129172646';
+            } else if (copyType === 'zelle') {
+                textToCopy = 'Yhoendri Aponte, +1-678-749-16-4';
+            }
+            if (textToCopy) {
+                navigator.clipboard.writeText(textToCopy);
+                showPopup('📋 Datos copiados al portapapeles', 2500);
+            }
+        }
+    });
+
+    // Synchronize amounts between payment details and personal data form
+    const montoInput = document.getElementById('monto');
+    const currencyToggle = document.getElementById('monto-currency');
+    const totalUsdSpan = document.getElementById('total-usd');
+    const totalBsSpan = document.getElementById('total-bolivares');
+
+    function syncAmounts() {
+        let cantidad = boletosSeleccionados.size || parseInt(document.getElementById("numero-boletos").value) || 0;
+        if (cantidad < 1) {
+            totalUsdSpan.innerText = '0.00 USD';
+            totalBsSpan.innerText = '0';
+            montoInput.value = '';
+            return;
+        }
+        const rate = getRate();
+        const totalUSD = cantidad * costoBoletoUSD;
+        const totalBs = Math.round(totalUSD * rate);
+
+        // Update total display
+        totalUsdSpan.innerText = totalUSD.toFixed(2) + ' USD';
+        totalBsSpan.innerText = totalBs.toLocaleString('es-VE');
+
+        // Update monto input based on currency toggle
+        const activeBtn = currencyToggle.querySelector('.cur-btn.active');
+        if (activeBtn) {
+            const currency = activeBtn.dataset.currency;
+            if (currency === 'USD') {
+                montoInput.value = totalUSD.toFixed(2);
+            } else {
+                montoInput.value = totalBs;
+            }
+        }
+    }
+
+    // Update sync when currency toggle changes
+    currencyToggle.querySelectorAll('.cur-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            currencyToggle.querySelectorAll('.cur-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            syncAmounts();
+        });
+    });
 
     // Modify form submit to include payment method and details
     document.getElementById('form').addEventListener('submit', function (event) {
