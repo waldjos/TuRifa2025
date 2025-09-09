@@ -80,17 +80,17 @@
 
   /* Mejorar responsividad del toggle de moneda */
   .currency-toggle {
-    max-width: 120px;
+    max-width: 200px;
     flex-wrap: nowrap;
   }
 
   .currency-toggle .cur-btn {
-    padding: 6px 8px;
-    font-size: 12px;
+    padding: 8px 16px;
+    font-size: 16px;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    min-width: 40px;
+    overflow: visible;
+    text-overflow: clip;
+    min-width: 60px;
     flex: 1 1 auto;
   }
 }
