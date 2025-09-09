@@ -263,6 +263,26 @@
       </form>
     </section>
 
+    <!-- Métodos de pago -->
+    <section class="section-card" style="margin-top: 24px;">
+      <h2>Métodos de Pago</h2>
+      <div class="payment-methods" style="display: flex; gap: 20px; flex-wrap: wrap;">
+        <label class="payment-option" style="cursor: pointer; display: flex; align-items: center; gap: 8px;">
+          <input type="radio" name="payment-method" value="pagomovil" checked />
+          <img src="{{ url_for('static', filename='pagomovil.png') }}" alt="Pago Móvil" style="height: 40px;" />
+          Pago Móvil
+        </label>
+        <label class="payment-option" style="cursor: pointer; display: flex; align-items: center; gap: 8px;">
+          <input type="radio" name="payment-method" value="zelle" />
+          <img src="{{ url_for('static', filename='zelle.png') }}" alt="Zelle" style="height: 40px;" />
+          Zelle
+        </label>
+      </div>
+      <div id="payment-details" style="margin-top: 16px;">
+        <!-- Aquí se mostrarán los campos específicos según el método seleccionado -->
+      </div>
+    </section>
+
   </main>
 
   <!-- Pie de página -->

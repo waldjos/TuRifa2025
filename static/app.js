@@ -93,6 +93,89 @@ document.addEventListener("DOMContentLoaded", () => {
         actualizarTotal();
     }
 
+    // New code to handle payment method selection and dynamic fields
+    const paymentMethodRadios = document.querySelectorAll('input[name="payment-method"]');
+    const paymentDetailsDiv = document.getElementById('payment-details');
+
+    function updatePaymentDetails() {
+        const selectedMethod = document.querySelector('input[name="payment-method"]:checked')?.value;
+        if (!selectedMethod) {
+            paymentDetailsDiv.innerHTML = '';
+            return;
+        }
+        if (selectedMethod === 'pagomovil') {
+            paymentDetailsDiv.innerHTML = `
+                <div class="field">
+                    <label for="pm-phone">Número de teléfono (Pago Móvil)</label>
+                    <input type="tel" id="pm-phone" name="pm-phone" placeholder="0412xxxxxxx" required />
+                </div>
+                <div class="field">
+                    <label for="pm-bank">Banco</label>
+                    <select id="pm-bank" name="pm-bank" required>
+                        <option value="">Seleccione banco</option>
+                        <option value="bdv">Banco de Venezuela</option>
+                        <option value="banco-bicentenario">Banco Bicentenario</option>
+                        <option value="mercantil">Mercantil</option>
+                        <option value="provincial">Provincial</option>
+                        <!-- Agregar más bancos si es necesario -->
+                    </select>
+                </div>
+            `;
+        } else if (selectedMethod === 'zelle') {
+            paymentDetailsDiv.innerHTML = `
+                <div class="field">
+                    <label for="zelle-email">Correo electrónico o teléfono (Zelle)</label>
+                    <input type="text" id="zelle-email" name="zelle-email" placeholder="ejemplo@correo.com o +1-xxx-xxx-xxxx" required />
+                </div>
+            `;
+        } else {
+            paymentDetailsDiv.innerHTML = '';
+        }
+    }
+
+    paymentMethodRadios.forEach(radio => {
+        radio.addEventListener('change', updatePaymentDetails);
+    });
+
+    updatePaymentDetails();
+
+    // Modify form submit to include payment method and details
+    document.getElementById('form').addEventListener('submit', function (event) {
+        event.preventDefault();
+        const btn = document.getElementById('button');
+        btn.value = 'Enviando...';
+
+        const nuevosBoletos = Array.from(boletosSeleccionados);
+        if (nuevosBoletos.length < 2) {
+            showPopup('Debes seleccionar al menos 2 boletos antes de comprar.',4000);
+            btn.value = 'Confirmar Compra';
+            return;
+        }
+
+        const selectedPaymentMethod = document.querySelector('input[name="payment-method"]:checked')?.value || '';
+
+        const payload = {
+            nombre: document.getElementById('nombre').value,
+            identificacion: document.getElementById('identificacion').value,
+            telefono: document.getElementById('telefono').value,
+            email: document.getElementById('email').value,
+            referencia: document.getElementById('referencia').value,
+            monto: document.getElementById('monto').value,
+            currency: (document.getElementById('currency')?.value) || 'USD',
+            boletos: nuevosBoletos,
+            paymentMethod: selectedPaymentMethod,
+            paymentDetails: {}
+        };
+
+        if (selectedPaymentMethod === 'pagomovil') {
+            payload.paymentDetails.phone = document.getElementById('pm-phone')?.value || '';
+            payload.paymentDetails.bank = document.getElementById('pm-bank')?.value || '';
+        } else if (selectedPaymentMethod === 'zelle') {
+            payload.paymentDetails.emailOrPhone = document.getElementById('zelle-email')?.value || '';
+        }
+
+        // Basic validation for payment details
+
     prevBtn?.addEventListener('click', () => {
         if (pageIndex > 0) {
             const target = pageIndex - 1;
