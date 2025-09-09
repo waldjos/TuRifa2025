@@ -101,19 +101,19 @@ document.addEventListener("DOMContentLoaded", () => {
     function updatePaymentDetails() {
         const selectedMethod = document.querySelector('input[name="payment-method"]:checked')?.value;
         if (!selectedMethod) {
-            pagomovilDetails.style.display = 'none';
-            zelleDetails.style.display = 'none';
+            if (pagomovilDetails) pagomovilDetails.style.display = 'none';
+            if (zelleDetails) zelleDetails.style.display = 'none';
             return;
         }
         if (selectedMethod === 'pagomovil') {
-            pagomovilDetails.style.display = 'block';
-            zelleDetails.style.display = 'none';
+            if (pagomovilDetails) pagomovilDetails.style.display = 'block';
+            if (zelleDetails) zelleDetails.style.display = 'none';
         } else if (selectedMethod === 'zelle') {
-            pagomovilDetails.style.display = 'none';
-            zelleDetails.style.display = 'block';
+            if (pagomovilDetails) pagomovilDetails.style.display = 'none';
+            if (zelleDetails) zelleDetails.style.display = 'block';
         } else {
-            pagomovilDetails.style.display = 'none';
-            zelleDetails.style.display = 'none';
+            if (pagomovilDetails) pagomovilDetails.style.display = 'none';
+            if (zelleDetails) zelleDetails.style.display = 'none';
         }
         syncAmounts();
     }
