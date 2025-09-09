@@ -47,6 +47,20 @@
   #purchases-table td {
     min-width: 100px;
   }
+
+  /* Fix for ticket selection and form order on mobile */
+  .booking-grid {
+    grid-template-columns: 1fr;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  /* Make ticket selection appear first */
+  .booking-controls {
+    order: 0 !important;
+  }
+  main > section > section {
+    order: 1 !important;
+  }
 }
 
 @media (max-width: 480px) {
