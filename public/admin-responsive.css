@@ -1,0 +1,96 @@
+/* Responsive styles for Admin Dashboard */
+
+@media (max-width: 900px) {
+  /* Stack .row vertically */
+  .row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  /* Stack controls vertically with spacing */
+  .controls {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  /* Inputs full width */
+  #rate,
+  #total-tickets {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Buttons full width on small screens */
+  .controls button,
+  .btn-primary,
+  .danger {
+    width: auto !important;
+    min-width: 100px;
+    flex: 1 1 auto;
+  }
+
+  /* Adjust margin for last button in controls */
+  .controls button:last-child {
+    margin-right: 0;
+  }
+
+  /* Make table container horizontally scrollable */
+  #purchases-table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Table cells min width for readability */
+  #purchases-table th,
+  #purchases-table td {
+    min-width: 100px;
+  }
+
+  /* Fix for ticket selection and form order on mobile */
+  .booking-grid {
+    grid-template-columns: 1fr;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  /* Make ticket selection appear first */
+  .booking-controls {
+    order: 0 !important;
+  }
+  main > section > section {
+    order: 1 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Further stack controls vertically */
+  .controls {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  /* Buttons full width */
+  .controls button,
+  .btn-primary,
+  .danger {
+    width: 100% !important;
+    min-width: auto;
+  }
+
+  /* Mejorar responsividad del toggle de moneda */
+  .currency-toggle {
+    max-width: 200px;
+    flex-wrap: nowrap;
+  }
+
+  .currency-toggle .cur-btn {
+    padding: 8px 16px;
+    font-size: 16px;
+    white-space: nowrap;
+    overflow: visible;
+    text-overflow: clip;
+    min-width: 60px;
+    flex: 1 1 auto;
+  }
+}
