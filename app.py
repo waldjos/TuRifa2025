@@ -12,7 +12,7 @@ except Exception:
 
 load_dotenv()
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 app.secret_key = os.getenv('FLASK_SECRET_KEY', '1234567890')
 # Admin credentials (defaults) - can be overridden with env vars
 ADMIN_EMAIL = os.getenv('ADMIN_EMAIL', 'turifa2025@gmail.com')
