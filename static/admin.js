@@ -1,4 +1,4 @@
-// admin.js - interactivity for admin dashboard
+/ admin.js - interactivity for admin dashboard
 async function fetchRate() {
   const res = await fetch('/api/rates');
   if (!res.ok) return;
@@ -7,7 +7,7 @@ async function fetchRate() {
   document.getElementById('rate-updated').innerText = data.updated_at || '--';
 }
 
-async function saveRate() {
++/*async function saveRate() {
   const rate = parseFloat(document.getElementById('rate').value);
   const res = await fetch('/api/rates', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({rate}) });
   if (res.ok) {
@@ -20,7 +20,7 @@ async function saveRate() {
 
 async function fetchPurchases() {
   const res = await fetch('/admin/purchases');
-  if (!res.ok) return;
+  if (!res.ok) return;¿¿m 
   const data = await res.json();
   const body = document.getElementById('purchases-body');
   body.innerHTML = '';
@@ -33,6 +33,7 @@ async function fetchPurchases() {
                    `<td>${(p.tickets || []).join(', ')}</td>` +
                    `<td>${p.monto || ''}</td>` +
                    `<td>${p.referencia || ''}</td>` +
+                   `<td>${p.currency || ''}</td>` +
                    `<td>${p.timestamp ? new Date(p.timestamp*1000).toLocaleString() : ''}</td>`;
     body.appendChild(tr);
   });
@@ -58,7 +59,7 @@ async function saveTotal() {
 async function exportCSV() {
   // Generate CSV from current purchases table data
   const rows = [];
-  const headers = ['Nombre', 'Identificación', 'Teléfono', 'Email', 'Tickets', 'Monto', 'Referencia', 'Timestamp'];
+  const headers = ['Nombre', 'Identificación', 'Teléfono', 'Email', 'Tickets', 'Monto', 'Referencia', 'Currency', 'Timestamp'];
   rows.push(headers.join(','));
 
   const tbody = document.getElementById('purchases-body');

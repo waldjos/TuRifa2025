@@ -533,6 +533,7 @@ def purchase():
                     'email': email,
                     'referencia': referencia,
                     'monto': monto,
+                    'currency': currency,
                     'tickets': reserved_holder,
                     'timestamp': __import__('time').time()
                 })
@@ -582,6 +583,7 @@ def purchase():
                 'email': email,
                 'referencia': referencia,
                 'monto': monto,
+                'currency': currency,
                 'tickets': boletos,
                 'timestamp': __import__('time').time()
             }
