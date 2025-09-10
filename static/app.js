@@ -520,6 +520,27 @@ document.addEventListener("DOMContentLoaded", () => {
             btn.value = 'Confirmar Compra';
             return;
         }
+        // Validar monto ingresado contra monto calculado
+        const montoIngresado = parseFloat(document.getElementById('monto').value);
+        const currency = (document.getElementById('currency')?.value) || 'USD';
+        const costoBoletoUSD = 2; // precio unitario en USD
+        const rate = getRate();
+        let montoCalculado = nuevosBoletos.length * costoBoletoUSD;
+        if (currency === 'VES') {
+            montoCalculado = Math.round(montoCalculado * rate);
+        } else {
+            montoCalculado = parseFloat(montoCalculado.toFixed(2));
+        }
+        if (currency === 'USD' && Math.abs(montoIngresado - montoCalculado) > 0.01) {
+            showPopup(`El monto ingresado (${montoIngresado.toFixed(2)} USD) no coincide con el monto esperado (${montoCalculado.toFixed(2)} USD).`, 6000);
+            btn.value = 'Confirmar Compra';
+            return;
+        }
+        if (currency === 'VES' && Math.abs(montoIngresado - montoCalculado) > 1) {
+            showPopup(`El monto ingresado (${montoIngresado.toLocaleString('es-VE')} Bs) no coincide con el monto esperado (${montoCalculado.toLocaleString('es-VE')} Bs).`, 6000);
+            btn.value = 'Confirmar Compra';
+            return;
+        }
         const payload = {
             nombre: document.getElementById('nombre').value,
             identificacion: document.getElementById('identificacion').value,
@@ -527,7 +548,7 @@ document.addEventListener("DOMContentLoaded", () => {
             email: document.getElementById('email').value,
             referencia: document.getElementById('referencia').value,
             monto: document.getElementById('monto').value,
-            currency: (document.getElementById('currency')?.value) || 'USD',
+            currency: currency,
             boletos: nuevosBoletos
         };
 
