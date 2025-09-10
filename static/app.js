@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const popup = document.getElementById("popup");
     const tasaDolar = 130; // VES per 1 USD (placeholder, admin will set real rate)
-    const costoBoletoUSD = 1; // base price in USD
+    const costoBoletoUSD = 2; // base price in USD (updated from 1 to 2)
     const costoBoleto = costoBoletoUSD; // used for USD calculations
     const boletosSeleccionados = new Set();
     let boletosDisponibles = [];
