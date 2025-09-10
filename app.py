@@ -466,7 +466,7 @@ def purchase():
 
     # calcular esperado
     try:
-        expected_usd = len(boletos) * 1.0  # precio base 1 USD por boleto
+        expected_usd = len(boletos) * 2.0  # precio base 2 USD por boleto (actualizado para coincidir con frontend)
         expected_bs = expected_usd * EXCHANGE_RATE
     except Exception:
         expected_usd = None
