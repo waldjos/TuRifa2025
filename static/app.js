@@ -537,9 +537,12 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
         if (currency === 'VES' && Math.abs(montoIngresado - montoCalculado) > 1) {
-            showPopup(`El monto ingresado (${montoIngresado.toLocaleString('es-VE')} Bs) no coincide con el monto esperado (${montoCalculado.toLocaleString('es-VE')} Bs).`, 6000);
-            btn.value = 'Confirmar Compra';
-            return;
+            // Ajustar tolerancia para evitar error por decimales
+            if (Math.abs(montoIngresado - montoCalculado) > 5) {
+                showPopup(`El monto ingresado (${montoIngresado.toLocaleString('es-VE')} Bs) no coincide con el monto esperado (${montoCalculado.toLocaleString('es-VE')} Bs).`, 6000);
+                btn.value = 'Confirmar Compra';
+                return;
+            }
         }
         const payload = {
             nombre: document.getElementById('nombre').value,
