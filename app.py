@@ -539,6 +539,14 @@ def purchase():
             except Exception:
                 pass
 
+            # guardar boletos vendidos individualmente para que aparezcan en Firebase
+            try:
+                boletos_ref = firebase_db.reference('boletosVendidos')
+                for boleto in reserved_holder:
+                    boletos_ref.child(boleto).set(True)
+            except Exception as e:
+                print('Error guardando boletos vendidos en Firebase:', e)
+
             # enviar email si está configurado
             if MAIL_ENABLED and email:
                 try:
