@@ -224,7 +224,13 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
             html += `<p>Cuenta: ${info.account}<br/>Cédula: ${info.cedula}<br/>Teléfono: ${info.telefono}</p>`;
         }
-        html += `<div class="field"><label>Monto a transferir</label><div class="amount">${currency === 'USD' ? formatCurrency(amountUSD,'USD') : formatCurrency(amountVES,'VES')}</div></div>`;
+        // Show amount only in USD for Zelle, otherwise show selected currency
+        if (method === 'zelle') {
+            html += `<div class="field"><label>Monto a transferir</label><div class="amount">${formatCurrency(amountUSD,'USD')}</div></div>`;
+            html += `<p style="font-size:0.9em; color:#cc3300; margin-top:8px;">Nota: En la descripción de la transacción solo colocar <strong>(PAGO)</strong>, no "rifa" ni ningún otro texto.</p>`;
+        } else {
+            html += `<div class="field"><label>Monto a transferir</label><div class="amount">${currency === 'USD' ? formatCurrency(amountUSD,'USD') : formatCurrency(amountVES,'VES')}</div></div>`;
+        }
         html += `<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;"><button class="copy-btn" data-copy="${method}">Copiar datos</button><button class="copy-btn" id="pay-close">Cerrar</button></div>`;
         panel.innerHTML = html;
         overlay.style.display = 'block'; panel.style.display = 'block'; panel.setAttribute('aria-hidden','false');
