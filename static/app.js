@@ -91,145 +91,18 @@ document.addEventListener("DOMContentLoaded", () => {
         actualizarTotal();
     }
 
-    // New code to handle payment method selection and dynamic fields
-    const paymentMethodRadios = document.querySelectorAll('input[name="payment-method"]');
-    const pagomovilDetails = document.getElementById('pagomovil-details');
-    const zelleDetails = document.getElementById('zelle-details');
-
-    function updatePaymentDetails() {
-        const selectedMethod = document.querySelector('input[name="payment-method"]:checked')?.value;
-        if (!selectedMethod) {
-            if (pagomovilDetails) pagomovilDetails.style.display = 'none';
-            if (zelleDetails) zelleDetails.style.display = 'none';
-            return;
-        }
-        if (selectedMethod === 'pagomovil') {
-            if (pagomovilDetails) pagomovilDetails.style.display = 'block';
-            if (zelleDetails) zelleDetails.style.display = 'none';
-        } else if (selectedMethod === 'zelle') {
-            if (pagomovilDetails) pagomovilDetails.style.display = 'none';
-            if (zelleDetails) zelleDetails.style.display = 'block';
-        } else {
-            if (pagomovilDetails) pagomovilDetails.style.display = 'none';
-            if (zelleDetails) zelleDetails.style.display = 'none';
-        }
-        syncAmounts();
-    }
-
-    paymentMethodRadios.forEach(radio => {
-        radio.addEventListener('change', updatePaymentDetails);
-    });
-
-    updatePaymentDetails();
-
-    // Copy button functionality
-    document.addEventListener('click', (e) => {
-        if (e.target.classList.contains('copy-btn')) {
-            const copyType = e.target.getAttribute('data-copy');
-            let textToCopy = '';
-            if (copyType === 'pagomovil-cedula') {
-                textToCopy = '22017682';
-            } else if (copyType === 'pagomovil-telefono') {
-                textToCopy = '04129172646';
-            } else if (copyType === 'zelle') {
-                textToCopy = 'Yhoendri Aponte, +1-678-749-16-4';
-            }
-            if (textToCopy) {
-                navigator.clipboard.writeText(textToCopy);
-                showPopup('📋 Datos copiados al portapapeles', 2500);
-            }
-        }
-    });
-
-    // Synchronize amounts between payment details and personal data form
-    const montoInput = document.getElementById('monto');
-    const currencyToggle = document.getElementById('monto-currency');
-    const totalUsdSpan = document.getElementById('total-usd');
-    const totalBsSpan = document.getElementById('total-bolivares');
-
-    function syncAmounts() {
-        let cantidad = boletosSeleccionados.size || parseInt(document.getElementById("numero-boletos").value) || 0;
-        if (cantidad < 1) {
-            totalUsdSpan.innerText = '0.00 USD';
-            totalBsSpan.innerText = '0';
-            montoInput.value = '';
-            return;
-        }
-        const rate = getRate();
-        const totalUSD = cantidad * costoBoletoUSD;
-        const totalBs = Math.round(totalUSD * rate);
-
-        // Update total display
-        totalUsdSpan.innerText = totalUSD.toFixed(2) + ' USD';
-        totalBsSpan.innerText = totalBs.toLocaleString('es-VE');
-
-        // Update monto input based on currency toggle
-        const activeBtn = currencyToggle.querySelector('.cur-btn.active');
-        if (activeBtn) {
-            const currency = activeBtn.dataset.currency;
-            if (currency === 'USD') {
-                montoInput.value = totalUSD.toFixed(2);
-            } else {
-                montoInput.value = totalBs;
-            }
-        }
-    }
-
-    // Update sync when currency toggle changes
-    currencyToggle.querySelectorAll('.cur-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            currencyToggle.querySelectorAll('.cur-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            syncAmounts();
-        });
-    });
-
-    // Modify form submit to include payment method and details
-    document.getElementById('form').addEventListener('submit', function (event) {
-        event.preventDefault();
-        btn.value = 'Enviando...';
-
-        const nuevosBoletos = Array.from(boletosSeleccionados);
-        if (nuevosBoletos.length < 2) {
-            showPopup('Debes seleccionar al menos 2 boletos antes de comprar.',4000);
-            btn.value = 'Confirmar Compra';
-            return;
-        }
-
-        const selectedPaymentMethod = document.querySelector('input[name="payment-method"]:checked')?.value || '';
-
-        const payload = {
-            nombre: document.getElementById('nombre').value,
-            identificacion: document.getElementById('identificacion').value,
-            telefono: document.getElementById('telefono').value,
-            email: document.getElementById('email').value,
-            referencia: document.getElementById('referencia').value,
-            monto: document.getElementById('monto').value,
-            currency: (document.getElementById('currency')?.value) || 'USD',
-            boletos: nuevosBoletos,
-            paymentMethod: selectedPaymentMethod,
-            paymentDetails: {}
-        };
-
-        if (selectedPaymentMethod === 'pagomovil') {
-            payload.paymentDetails.phone = document.getElementById('pm-phone')?.value || '';
-            payload.paymentDetails.bank = document.getElementById('pm-bank')?.value || '';
-        } else if (selectedPaymentMethod === 'zelle') {
-            payload.paymentDetails.emailOrPhone = document.getElementById('zelle-email')?.value || '';
-        }
-
-        // Basic validation for payment details
-
     prevBtn?.addEventListener('click', () => {
         if (pageIndex > 0) {
-            pageIndex--;
-            renderGrid();
+            const target = pageIndex - 1;
+            const html = `<p>Navegarás a la página ${target + 1}.</p><p>¿Confirmas?</p>`;
+            showActionPanel('Ir a página anterior', html, () => { pageIndex = target; renderGrid(); }, () => {});
         }
     });
     nextBtn?.addEventListener('click', () => {
         if ((pageIndex + 1) * perPage < boletosDisponibles.length) {
-            pageIndex++;
-            renderGrid();
+            const target = pageIndex + 1;
+            const html = `<p>Navegarás a la página ${target + 1}.</p><p>¿Confirmas?</p>`;
+            showActionPanel('Ir a página siguiente', html, () => { pageIndex = target; renderGrid(); }, () => {});
         }
     });
     perPageEl?.addEventListener('change', () => { pageIndex = 0; renderGrid(); });

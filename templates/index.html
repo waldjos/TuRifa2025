@@ -146,10 +146,10 @@
     <section id="premios" style="display:flex;gap:28px;align-items:center;justify-content:space-between;">
       <div style="flex:1">
     <h1 style="font-size:40px;line-height:1">SUPER COMBO GANA</h1>
-  <p class="animated-text" style="font-size:20px;margin-top:6px"><strong>Premio principal: $1,000</strong></p>
+  <p class="animated-text" style="font-size:20px;margin-top:6px"><strong>SUPER GANA — premio principal: $1,000</strong></p>
   <p style="margin-top:12px;color:rgba(255,255,255,0.8)">Compra tus boletos en USD o Bs y participa en el sorteo público de <strong>SUPER GANA</strong>. Transmisión en vivo y verificación pública del seed aleatorio.</p>
   <p style="margin-top:8px;color:rgba(255,255,255,0.7);font-size:14px">Soporte: La validación de tu participación puede tardar entre <strong>12 a 24 horas</strong>.</p>
-        <div style="margin-top:18px"><a class="btn-primary" href="#ticket-grid-title">Seleccionar boletos</a></div>
+        <div style="margin-top:18px"><a class="btn-primary" href="#ticket-grid">Seleccionar boletos</a></div>
       </div>
       <div style="width:46%">
         <div class="card-3d" style="padding:18px;border-radius:14px;">
@@ -181,12 +181,27 @@
 
     <!-- Selección de boletos -->
     <section class="section-card">
-      <h2 id="ticket-grid-title">BOLETOS DISPONIBLES</h2>
+      <h2>BOLETOS DISPONIBLES</h2>
+
+      <!-- Controles de paginación -->
+      <div class="pagination-controls" style="display:flex;gap:12px;align-items:center;justify-content:center;margin-bottom:16px;">
+        <button id="page-prev" class="btn-primary small">Anterior</button>
+        <span>Página <span id="page-index">1</span></span>
+        <select id="per-page">
+          <option value="50">50 por página</option>
+          <option value="100" selected>100 por página</option>
+          <option value="200">200 por página</option>
+        </select>
+        <button id="page-next" class="btn-primary small">Siguiente</button>
+      </div>
+
+      <!-- Grid de boletos -->
+      <div id="ticket-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(60px,1fr));gap:8px;max-height:400px;overflow-y:auto;padding:16px;border:1px solid #ddd;border-radius:8px;"></div>
 
       <div class="booking-grid">
         <!-- Left: controls & form -->
         <aside class="booking-controls">
-          <form id="boletos-form" aria-labelledby="ticket-grid-title">
+          <form id="boletos-form" aria-labelledby="ticket-grid">
             <div class="form-row">
               <label for="numero-boletos">Número de boletos (mínimo 2)</label>
               <input type="number" id="numero-boletos" name="numero-boletos" min="1" value="2" aria-describedby="numero-help" />
@@ -201,17 +216,6 @@
                   <option value="USD">USD</option>
                   <option value="VES">Bs</option>
                 </select>
-                <div class="page-controls" style="margin-top: 10px;">
-                  <button id="page-prev" type="button" class="btn-secondary small">Prev</button>
-                  <span id="page-index">1</span>
-                  <button id="page-next" type="button" class="btn-secondary small">Next</button>
-                  <label for="per-page" style="margin-left: 10px;">Por página:</label>
-                  <select id="per-page">
-                    <option value="100">100</option>
-                    <option value="200">200</option>
-                    <option value="500">500</option>
-                  </select>
-                </div>
               </div>
               <div class="right-controls" aria-live="polite">
                 <div class="selected-count">Seleccionados: <strong id="boletos-seleccionados">0</strong></div>
@@ -224,39 +228,6 @@
             </div>
           </form>
         </aside>
-
-        <!-- Right: ticket grid -->
-        <div id="ticket-grid" class="ticket-grid"></div>
-      </div>
-
-    <!-- Métodos de pago -->
-    <section class="section-card" style="margin-top: 24px;">
-      <h2>Métodos de Pago</h2>
-      <div class="payment-methods" style="display: flex; gap: 20px; flex-wrap: wrap;">
-        <label class="payment-option" style="cursor: pointer; display: flex; align-items: center; gap: 8px;">
-          <input type="radio" name="payment-method" value="pagomovil" checked />
-          <img src="{{ url_for('static', filename='pagomovil.png') }}" alt="Pago Móvil" style="height: 40px;" />
-          Pago Móvil
-        </label>
-        <label class="payment-option" style="cursor: pointer; display: flex; align-items: center; gap: 8px;">
-          <input type="radio" name="payment-method" value="zelle" />
-          <img src="{{ url_for('static', filename='zelle.png') }}" alt="Zelle" style="height: 40px;" />
-          Zelle
-        </label>
-      </div>
-      <div id="payment-details" style="margin-top: 16px;">
-        <div id="pagomovil-details" style="display:none;">
-          <p><strong>Cuenta:</strong> 0134</p>
-          <p><strong>Cédula:</strong> 22017682 <button class="copy-btn" data-copy="pagomovil-cedula" aria-label="Copiar cédula">📋</button></p>
-          <p><strong>Teléfono:</strong> 04129172646 <button class="copy-btn" data-copy="pagomovil-telefono" aria-label="Copiar teléfono">📋</button></p>
-        </div>
-        <div id="zelle-details" style="display:none;">
-          <p><strong>Nombre:</strong> Yhoendri Aponte</p>
-          <p><strong>Teléfono:</strong> +1-678-749-16-4</p>
-          <button class="copy-btn" data-copy="zelle" aria-label="Copiar datos de Zelle">Copiar datos</button>
-        </div>
-      </div>
-    </section>
 
     <!-- Formulario -->
     <section>

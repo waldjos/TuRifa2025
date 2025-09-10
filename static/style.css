@@ -6,29 +6,22 @@
   }
   
   :root{
-    --brand: #ff0000; /* scary red primary */
-    --accent: #8b0000; /* dark red accent */
+    --brand: #0ea5a4; /* placeholder primary */
+    --accent: #ff7a18; /* accent */
     --surface: #ffffff;
-    --muted: #666666;
-    --success: #00ff00;
-    --warning: #ffff00;
-    --bg: #000000;
-    --glass: rgba(255,0,0,0.1);
+    --muted: #6b7280;
+    --success: #16a34a;
+    --warning: #f59e0b;
+    --bg: #0f172a;
+    --glass: rgba(255,255,255,0.06);
   }
 
   body {
-    font-family: 'Courier New', monospace; /* CTF terminal style */
-    background: linear-gradient(180deg, #000000 0%, #1a0000 60%);
-    color: #ff0000;
+    font-family: Inter, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(180deg, #071529 0%, #071c2a 60%);
+    color: #e6eef8;
     line-height: 1.6;
     -webkit-font-smoothing:antialiased;
-    animation: flicker 3s infinite alternate;
-  }
-
-  @keyframes flicker {
-    0% { opacity: 1; }
-    50% { opacity: 0.8; }
-    100% { opacity: 1; }
   }
   
   /* HEADER */
@@ -47,35 +40,31 @@
   
   /* NAV */
   nav {
-    background: linear-gradient(90deg, #000000, #1a0000);
+    background-color: #fff;
     padding: 10px 0;
-    border-bottom: 2px solid #ff0000;
-    box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+    border-bottom: 1px solid #ddd;
   }
-
+  
   nav ul {
     list-style: none;
     display: flex;
     justify-content: center;
     gap: 30px;
   }
-
+  
   nav ul li a {
     text-decoration: none;
-    color: #ff0000;
+    color: var(--brand);
     font-weight: 700;
-    transition: color 0.15s ease, text-shadow 0.15s ease;
-    text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+    transition: color 0.15s ease;
   }
-
+  
   nav ul li a:hover {
-    color: #ffffff;
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+    color: #e36b00;
   }
-
+  
   nav ul li a.clicked {
-    color: #00ff00;
-    text-shadow: 0 0 15px rgba(0, 255, 0, 0.8);
+    color: #000;
   }
   
   /* MAIN */
@@ -96,9 +85,8 @@
     text-align: center;
     animation: pulse 2s infinite;
     font-weight: 800;
-    color: #ff0000;
-    text-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
-    background: linear-gradient(90deg, #ff0000, #8b0000);
+    color: linear-gradient(90deg,var(--brand),var(--accent));
+    background: linear-gradient(90deg, rgba(14,165,164,1), rgba(255,122,24,1));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
@@ -119,23 +107,20 @@
   
   /* FORM */
   form {
-    background: linear-gradient(180deg, rgba(255,0,0,0.1), rgba(139,0,0,0.05));
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
     padding: 22px;
     margin-bottom: 28px;
     border-radius: 12px;
-    border: 2px solid #ff0000;
-    box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+    border: 1px solid rgba(255,255,255,0.04);
     backdrop-filter: blur(4px) saturate(120%);
   }
-
+  
   form label {
     font-weight: bold;
     margin-top: 10px;
     display: block;
-    color: #ff0000;
-    text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
   }
-
+  
   input[type="text"],
   input[type="number"],
   input[type="email"],
@@ -144,12 +129,11 @@
     padding: 12px;
     margin-top: 6px;
     margin-bottom: 12px;
-    border: 2px solid #ff0000;
+    border: 1px solid rgba(255,255,255,0.06);
     border-radius: 8px;
     font-size: 15px;
-    background: rgba(0,0,0,0.8);
-    color: #ff0000;
-    font-family: 'Courier New', monospace;
+    background: rgba(255,255,255,0.02);
+    color: var(--surface);
   }
 
   /* Modern form layout: two columns on wide screens */
@@ -182,16 +166,14 @@
 
   /* Focus & validation states */
   input:focus, select:focus, textarea:focus {
-    border-color: #ff0000;
-    box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
-    outline: 2px solid #ff0000;
-    background: rgba(255, 0, 0, 0.1);
+    border-color: var(--brand);
+    box-shadow: 0 6px 22px rgba(14,165,164,0.06);
+    outline: none;
   }
 
   input:invalid {
-    border-color: #ff0000;
-    box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
-    background: rgba(255, 0, 0, 0.2);
+    border-color: rgba(239,68,68,0.9);
+    box-shadow: 0 2px 10px rgba(239,68,68,0.06);
   }
 
   /* Checkbox and label layout */
@@ -256,46 +238,38 @@
   
   .btn-primary {
     display:inline-block;
-    background: linear-gradient(90deg,#ff0000,#8b0000);
+    background: linear-gradient(90deg,var(--brand),var(--accent));
     color: white;
     padding: 12px 18px;
-    border: 2px solid #ff0000;
+    border: none;
     border-radius: 999px;
     font-size: 16px;
     font-weight: 700;
     cursor: pointer;
-    transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
-    box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
-    font-family: 'Courier New', monospace;
+    transition: transform .18s ease, box-shadow .18s ease;
+    box-shadow: 0 6px 20px rgba(14,165,164,0.12);
   }
 
-  .btn-primary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 0 30px rgba(255, 0, 0, 0.8);
-    background: linear-gradient(90deg,#8b0000,#ff0000);
-  }
-
+  .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 14px 36px rgba(14,165,164,0.14); }
+  
   #button:hover, #btn-confirmar:hover, #btn-azar:hover {
-    background: linear-gradient(90deg,#8b0000,#ff0000);
+    background-color: #e36b00;
     transform: scale(1.03);
-    box-shadow: 0 0 25px rgba(255, 0, 0, 0.7);
   }
   
   .pago-opcion {
-    background: linear-gradient(180deg, rgba(255,0,0,0.1), rgba(139,0,0,0.05));
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
     padding: 18px;
     margin: 12px auto;
     border-radius: 12px;
-    border: 2px solid #ff0000;
     text-align: center;
-    box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+    box-shadow: 0 10px 30px rgba(2,6,23,0.6);
     max-width: 560px;
-    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    transition: transform 0.18s ease;
   }
-
+  
   .pago-opcion:hover {
     transform: scale(1.02);
-    box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
   }
 
   /* Modern small variant for primary buttons used in controls */
@@ -491,11 +465,10 @@
   align-items: start;
 }
 .booking-controls {
-  background: linear-gradient(180deg, rgba(255,0,0,0.1), rgba(139,0,0,0.05));
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
   padding: 18px;
   border-radius: 12px;
-  border: 2px solid #ff0000;
-  box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+  border: 1px solid rgba(255,255,255,0.04);
 }
 .booking-controls .form-row { margin-bottom: 12px; }
 .controls-row { display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
@@ -509,7 +482,7 @@
 .totals { font-weight:700; margin-top:6px; }
 .grid-wrap { background: transparent; }
 #ticket-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap:10px; }
-.ticket-btn { width:100%; display:flex; align-items:center; justify-content:center; background: linear-gradient(90deg, rgba(255,0,0,0.1), rgba(139,0,0,0.05)); border: 2px solid #ff0000; color: #ff0000; }
+.ticket-btn { width:100%; display:flex; align-items:center; justify-content:center; }
 
 /* Small screens: stack controls over grid */
 @media (max-width: 900px) {
@@ -521,9 +494,6 @@
 }
 
 /* Slight visual tweak for modern look */
-.booking-controls { box-shadow: 0 0 20px rgba(255, 0, 0, 0.3); }
+.booking-controls { box-shadow: 0 12px 40px rgba(2,6,23,0.55); }
 .ticket-btn { transition: transform .12s ease, box-shadow .12s ease; }
-.ticket-btn:hover { background: linear-gradient(90deg, rgba(139,0,0,0.2), rgba(255,0,0,0.1)); box-shadow: 0 0 15px rgba(255, 0, 0, 0.5); }
-.ticket-btn.selected { background: linear-gradient(90deg, rgba(255,0,0,0.3), rgba(139,0,0,0.2)); box-shadow: 0 0 25px rgba(255, 0, 0, 0.8); }
-.ticket-btn:disabled { background: rgba(128,128,128,0.2); border: 2px solid #666666; color: #666666; cursor: not-allowed; }
 .ticket-btn:active { transform: translateY(1px); }
