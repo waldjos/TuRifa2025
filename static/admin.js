@@ -56,8 +56,40 @@ async function saveTotal() {
 }
 
 async function exportCSV() {
-  const win = window.open('/admin/export', '_blank');
-  if (!win) alert('Permite popups para descargar el CSV');
+  // Generate CSV from current purchases table data
+  const rows = [];
+  const headers = ['Nombre', 'Identificación', 'Teléfono', 'Email', 'Tickets', 'Monto', 'Referencia', 'Timestamp'];
+  rows.push(headers.join(','));
+
+  const tbody = document.getElementById('purchases-body');
+  if (!tbody) {
+    alert('No hay datos para exportar');
+    return;
+  }
+
+  for (const tr of tbody.querySelectorAll('tr')) {
+    const cols = Array.from(tr.querySelectorAll('td')).map(td => {
+      // Escape quotes and commas in text
+      let text = td.innerText.replace(/"/g, '""');
+      if (text.includes(',') || text.includes('"') || text.includes('\n')) {
+        text = `"${text}"`;
+      }
+      return text;
+    });
+    rows.push(cols.join(','));
+  }
+
+  const csvContent = rows.join('\n');
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'ventas_tickets.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
 
 async function clearAll() {

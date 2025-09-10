@@ -199,35 +199,34 @@
       <div id="ticket-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(60px,1fr));gap:8px;max-height:400px;overflow-y:auto;padding:16px;border:1px solid #ddd;border-radius:8px;"></div>
 
       <div class="booking-grid">
-        <!-- Left: controls & form -->
-        <aside class="booking-controls">
-          <form id="boletos-form" aria-labelledby="ticket-grid">
-            <div class="form-row">
-              <label for="numero-boletos">Número de boletos (mínimo 2)</label>
-              <input type="number" id="numero-boletos" name="numero-boletos" min="1" value="2" aria-describedby="numero-help" />
-              <div id="numero-help" class="sr-only">Selecciona mínimo 2 boletos según reglas</div>
+      </div>
+      <!-- Left: controls & form -->
+      <aside class="booking-controls">
+        <form id="boletos-form" aria-labelledby="ticket-grid">
+          <div class="form-row">
+            <label for="numero-boletos">Número de boletos (mínimo 2)</label>
+            <input type="number" id="numero-boletos" name="numero-boletos" min="1" value="2" aria-describedby="numero-help" />
+            <div id="numero-help" class="sr-only">Selecciona mínimo 2 boletos según reglas</div>
+          </div>
+          <div class="controls-row">
+            <div class="left-controls">
+              <button type="button" id="btn-azar" class="btn-primary small">Elegir boletos</button>
+              <label for="currency">Moneda</label>
+              <select id="currency">
+                <option value="USD">USD</option>
+                <option value="VES">Bs</option>
+              </select>
             </div>
-
-            <div class="controls-row">
-              <div class="left-controls">
-                <button type="button" id="btn-azar" class="btn-primary small">Elegir boletos</button>
-                <label for="currency">Moneda</label>
-                <select id="currency">
-                  <option value="USD">USD</option>
-                  <option value="VES">Bs</option>
-                </select>
-              </div>
-              <div class="right-controls" aria-live="polite">
-                <div class="selected-count">Seleccionados: <strong id="boletos-seleccionados">0</strong></div>
-              </div>
+            <div class="right-controls" aria-live="polite">
+              <div class="selected-count">Seleccionados: <strong id="boletos-seleccionados">0</strong></div>
             </div>
-
-            <div class="summary-row">
-              <ul id="lista-numeros" aria-live="polite" class="picked-list"></ul>
-              <div class="totals">Total: <span id="total-usd">0 USD</span> — <span id="total-bolivares">0</span> Bs</div>
-            </div>
-          </form>
-        </aside>
+          </div>
+          <div class="summary-row">
+            <ul id="lista-numeros" aria-live="polite" class="picked-list"></ul>
+            <div class="totals">Total: <span id="total-usd">0 USD</span> — <span id="total-bolivares">0</span> Bs</div>
+          </div>
+        </form>
+      </aside>
 
     <!-- Formulario -->
     <section>
@@ -267,12 +266,10 @@
             </div>
           </div>
         </div>
-
         <div class="checkbox-container">
           <input type="checkbox" id="acepto-terminos" name="acepto-terminos" required />
           <label for="acepto-terminos">He leído y acepto los <a href="#">Términos y Condiciones</a> y las <a href="#">Bases del sorteo</a></label>
         </div>
-
         <input type="submit" id="button" class="btn-primary" value="Confirmar Compra" aria-live="polite">
       </form>
     </section>
