@@ -1,4 +1,4 @@
-/ admin.js - interactivity for admin dashboard
+// admin.js - interactivity for admin dashboard
 async function fetchRate() {
   const res = await fetch('/api/rates');
   if (!res.ok) return;
@@ -7,7 +7,7 @@ async function fetchRate() {
   document.getElementById('rate-updated').innerText = data.updated_at || '--';
 }
 
-+/*async function saveRate() {
+async function saveRate() {
   const rate = parseFloat(document.getElementById('rate').value);
   const res = await fetch('/api/rates', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({rate}) });
   if (res.ok) {
@@ -20,7 +20,7 @@ async function fetchRate() {
 
 async function fetchPurchases() {
   const res = await fetch('/admin/purchases');
-  if (!res.ok) return;¿¿m 
+  if (!res.ok) return;
   const data = await res.json();
   const body = document.getElementById('purchases-body');
   body.innerHTML = '';
@@ -119,46 +119,4 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // refresh purchases periodically
   setInterval(fetchPurchases, 15000);
-});
-document.addEventListener('DOMContentLoaded', () => {
-  const soldList = document.getElementById('sold-list');
-  const refresh = document.getElementById('refresh');
-  const exportBtn = document.getElementById('export');
-
-  async function load() {
-    const res = await fetch('/admin/data');
-    if (!res.ok) return;
-    const j = await res.json();
-    soldList.innerHTML = '';
-    (j.sold || []).forEach(s => {
-      const li = document.createElement('li');
-      li.innerText = s;
-      soldList.appendChild(li);
-    });
-  }
-
-  async function loadRate() {
-    try {
-      const r = await fetch('/api/rates');
-      const j = await r.json();
-      document.getElementById('rate').value = j.rate || '';
-    } catch(e) { console.error('Could not load rate', e); }
-  }
-
-  document.getElementById('save-rate').addEventListener('click', async () => {
-    const v = parseFloat(document.getElementById('rate').value);
-    if (!v || v <= 0) return alert('Valor inválido');
-    const res = await fetch('/api/rates', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({rate: v}) });
-    if (res.ok) {
-      alert('Tasa actualizada');
-    } else {
-      alert('Error actualizando tasa');
-    }
-  });
-
-  refresh.addEventListener('click', load);
-  exportBtn.addEventListener('click', () => { window.location = '/admin/export'; });
-
-  load();
-  loadRate();
 });
