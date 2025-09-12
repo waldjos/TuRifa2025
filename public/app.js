@@ -24,88 +24,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const tasaDolar = 130; // VES per 1 USD (placeholder, admin will set real rate)
     const costoBoletoUSD = 1; // base price in USD
     const costoBoleto = costoBoletoUSD; // used for USD calculations
-    const boletosSeleccionados = new Set();
-    let boletosDisponibles = [];
-    // Grid state
-    let pageIndex = 0;
-    let perPage = 100;
-    // hold map: ticket -> {expires: timestamp, sessionId}
-    const holds = new Map();
 
-    const grid = document.getElementById('ticket-grid');
-    const pageIndexEl = document.getElementById('page-index');
-    const perPageEl = document.getElementById('per-page');
-    const prevBtn = document.getElementById('page-prev');
-    const nextBtn = document.getElementById('page-next');
+    // Removed boletosSeleccionados, boletosDisponibles, grid, pagination, holds, and related event listeners
 
-    function renderGrid() {
-        if (!grid) return;
-        grid.innerHTML = '';
-        perPage = parseInt(perPageEl?.value || perPage);
-        const start = pageIndex * perPage;
-        const slice = boletosDisponibles.slice(start, start + perPage);
-        slice.forEach(num => {
-            const btn = document.createElement('button');
-            btn.className = 'ticket-btn';
-            btn.setAttribute('role', 'gridcell');
-            btn.setAttribute('aria-label', `Boleto ${num}`);
-            btn.dataset.num = num;
-            btn.innerText = num;
-            btn.tabIndex = 0;
-            // disabled if not in available list (safety) or held by others
-            const hold = holds.get(num);
-            const now = Date.now();
-            if (hold && hold.expires > now) {
-                btn.disabled = true;
-                btn.title = 'Temporalmente en hold';
-                btn.classList.add('held');
-            }
-            btn.addEventListener('click', () => toggleTicket(num, btn));
-            btn.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleTicket(num, btn); } });
-            grid.appendChild(btn);
-        });
-        pageIndexEl.innerText = pageIndex + 1;
-    }
+    // Removed renderGrid and toggleTicket functions
 
-    function toggleTicket(num, btn) {
-        // simple hold logic: if already selected, unselect and release hold
-        if (boletosSeleccionados.has(num)) {
-            boletosSeleccionados.delete(num);
-            btn.classList.remove('selected');
-            holds.delete(num);
-        } else {
-            boletosSeleccionados.add(num);
-            btn.classList.add('selected');
-            holds.set(num, { expires: Date.now() + HOLD_MS, sessionId: 'local' });
-            // schedule release
-            setTimeout(() => { if (holds.get(num) && holds.get(num).expires <= Date.now()) { holds.delete(num); renderGrid(); } }, HOLD_MS + 500);
-        }
-        document.getElementById('boletos-seleccionados').innerText = boletosSeleccionados.size;
-        document.getElementById('boletos').value = Array.from(boletosSeleccionados).join(', ');
-        // actualizar lista visual de números seleccionados
-        const lista = document.getElementById('lista-numeros');
-        if (lista) {
-            lista.innerHTML = '';
-            Array.from(boletosSeleccionados).forEach(n => { const li = document.createElement('li'); li.innerText = `Boleto: ${n}`; lista.appendChild(li); });
-        }
-        actualizarTotal();
-    }
-
-    prevBtn?.addEventListener('click', () => {
-        if (pageIndex > 0) {
-            const target = pageIndex - 1;
-            const html = `<p>Navegarás a la página ${target + 1}.</p><p>¿Confirmas?</p>`;
-            showActionPanel('Ir a página anterior', html, () => { pageIndex = target; renderGrid(); }, () => {});
-        }
-    });
-    nextBtn?.addEventListener('click', () => {
-        if ((pageIndex + 1) * perPage < boletosDisponibles.length) {
-            const target = pageIndex + 1;
-            const html = `<p>Navegarás a la página ${target + 1}.</p><p>¿Confirmas?</p>`;
-            showActionPanel('Ir a página siguiente', html, () => { pageIndex = target; renderGrid(); }, () => {});
-        }
-    });
-    perPageEl?.addEventListener('change', () => { pageIndex = 0; renderGrid(); });
+    // Removed pagination button event listeners and perPageEl change listener
 
     function showPopup(message, duration = 3000) {
         popup.innerHTML = `<p>${message}</p>`;
